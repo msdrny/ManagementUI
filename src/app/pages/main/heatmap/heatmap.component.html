@@ -1,0 +1,79 @@
+
+
+
+
+    <h1 class="page-title">Heat Map For Test House
+
+    </h1>
+
+        <div class="row">
+      
+            <div class="col-9">
+              <section widgster  [optionsControl]="true" [reloadControl]="true"
+                [fullscreenControl]="false" style="width: fit-content;" >
+                <h5 *widgsterTitle>Kitchen</h5>
+                <div  class="chart-overflow-bottom" >
+                  <canvas  #canvas (mousemove)="showDetailsForKitchen($event, canvas)" id="canvas" width="1550px" height="1000px" style="border:none" ></canvas>
+                  <canvas #tipKitchen id="tip" width=200 height=125  style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+                </div>
+              </section>
+            </div>
+        </div>
+
+        <div class="row">
+          <div class="col-9">
+                <section widgster  [optionsControl]="true" [reloadControl]="true"
+                  [fullscreenControl]="false" style="width: fit-content;" >
+                  <h5 *widgsterTitle>Upstairs</h5>
+                  <div  class="chart-overflow-bottom" >
+                    <canvas  #canvasForUpstairs  (mousemove)="showDetailsForUpstairs($event, canvasForUpstairs)" id="canvasForUpstairs" width="1550px" height="850px" style="border:none" ></canvas>
+                    <canvas #tipForUpstairs id="tip" width=200 height=125  style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+                  
+                  </div>
+                </section>
+              </div>
+ </div>
+            
+
+          
+
+          <div class="row">
+      
+            <div class="col-9">
+              <section widgster  [optionsControl]="true" [reloadControl]="true"
+                [fullscreenControl]="false"  style="width: fit-content;">
+                <h5 *widgsterTitle>Downstairs</h5>
+                <div #downstairs class="chart-overflow-bottom" >
+                  <canvas  #canvasForDownstairs (mousemove)="showDetails($event, canvasForDownstairs)" id="canvasForDownstairs" width="1550px" height="850px"  >
+                  
+                  </canvas>
+                  <canvas #tip id="tip" width=200 height=125  style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
+                
+                </div>
+              </section>
+            </div>
+
+          </div>
+
+          <div class="row">
+          
+            <div class="col-9">
+                <section widgster  [optionsControl]="true" [reloadControl]="true"
+                  [fullscreenControl]="false" style="width:fit-content;" >
+                  <h5 *widgsterTitle>Garage</h5>
+                  <div  class="chart-overflow-bottom" >
+                    <canvas  #canvasForGarage id="canvasForGarage" width="1550px" height="850px" style="border:none" ></canvas>
+                  
+                  </div>
+                </section>
+              </div>
+            
+
+          </div>
+          
+ 
+
+      
+  
+
+ 

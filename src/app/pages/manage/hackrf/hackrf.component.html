@@ -1,0 +1,83 @@
+
+
+  
+  <h1 class="page-title">Hackrf Status and Noise Control
+
+  </h1>
+<div class="row">
+  <div class="col-lg-4 col-12">
+    <section widgster [reloadControl]="false" [fullscreenControl]="false" [collapseControl]="false" [optionsControl]="false">
+      <h6 *widgsterTitle> Hackrf Status </h6>
+      <pre></pre>
+      <div class="stats-row">
+        <div class="stat-item">
+          <h6 class="name">Status</h6>
+          <p class="value">{{status}} &nbsp;&nbsp;&nbsp;&nbsp; <span [class]="className"></span></p>
+          
+        </div>
+        <div class="stat-item">
+          <h6 class="name">Up Time</h6>
+          <p class="value">{{onTime}}</p>
+        </div>
+      </div>
+      <div class="progress progress-xs">
+        <!-- <div class="progress-bar bg-danger" style="width: 60%"></div> -->
+        <progressbar [animate]="true" [striped]="true" class="mb-sm" [value]="loadPercentage" [type]="colorOfBar" style="max-height: 15px"></progressbar>
+      </div>
+      <p>
+        <!-- <small><span class="circle bg-success"><i style="color: #293647" class="fa fa-chevron-down"></i></span></small> -->
+        <span class="fw-semi-bold">&nbsp;{{message}} </span>
+      </p>
+      <pre></pre>
+    </section>
+  </div>
+
+  <div class="col-lg-4 col-12">
+    <section widgster [reloadControl]="false" [fullscreenControl]="false" [collapseControl]="false" [optionsControl]="false">
+      <h6 *widgsterTitle> Hackrf Controller </h6>
+
+      <form class="form-horizontal form-label-left" role="form">
+        <fieldset>
+
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="grouped-select">Select percentage for noise load</label>
+            <div class="col-md-8 ">
+              <ng-select  [items]="percentage"            bindLabel="name"  [(ngModel)]="selectedPercentage" [ngModelOptions]="{standalone: true}"
+              bindValue="id" >
+              </ng-select>
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label " for="default-select">Select target channel</label>
+            <div class="col-md-8 ">
+              <ng-select [items]="channelList" 
+              bindLabel="name" 
+              bindValue="id" 
+              [(ngModel)]="selectedChannel"
+              [ngModelOptions]="{standalone: true}"
+              >
+   </ng-select>
+
+
+              
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-4 col-form-label" for="grouped-select"></label>
+            <div class="col-md-8 ">
+              <button class="btn btn-success width-100  mr-3 mb-3" role="button" (click)="runHackrf($event)">
+                Run
+              </button>
+
+              <button class="btn btn-danger width-100 mr-3 mb-3" role="button">
+                Stop
+              </button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+
+
+    </section>
+  </div>
+</div>

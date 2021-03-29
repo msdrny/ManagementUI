@@ -1,0 +1,48 @@
+<div class="analytics-page">
+    <h1 class="page-title"> RSSI Waterfall
+
+    </h1>
+
+        <div class="row">
+          <div class="col-12">
+            <section widgster  [optionsControl]="true" [reloadControl]="true"
+              [fullscreenControl]="false">
+              <h5 *widgsterTitle>Signal Waterfall Graph</h5>
+            
+              <div  class="chart-overflow-bottom" >
+                <!-- <canvas  #canvas id="canvas" width="500" height="100" style="border:none" ></canvas> -->
+                <input type="text" placeholder="Enter Datetime" style="height: 30px; width: 300px;"
+                ngxDaterangepickerMd
+                [timePicker]="true"
+                [timePickerSeconds]="true"
+                [timePickerIncrement]="1"
+                [timePicker24Hour]="true"
+                [locale]="{format: 'DD/MM/YYYY HH:mm:ss', firstDay: 1}"
+                [(ngModel)]="selected"
+                [ranges]="ranges"
+                (rangeClicked)="rangeClicked($event)"
+                [showClearButton]="true"
+                [closeOnAutoApply]="true"
+                [showCancel]="true"
+                [isInvalidDate] = "isInvalidDate"
+                [alwaysShowCalendars]="true"
+                (change)="change(this)"/>  
+      
+
+        <div id="heatmap"  style="height: 1200px; width: auto;" ></div>
+              </div>
+            </section>
+        </div>
+      
+    
+
+
+        
+
+          </div>
+ 
+
+
+ 
+</div>
+  

@@ -1,0 +1,106 @@
+
+    <h1 class="page-title"> {{title}}
+
+    </h1>
+
+<div class="row">
+    <!-- <div class="col-4   ">
+      <section widgster [optionsControl]="false" [reloadControl]="false" [fullscreenControl]="false"
+        [collapseControl]="false" [closeControl]="false" >
+
+          <div class="col-1">
+            <span class="widget-icon">
+              <img src="../../../../assets/img/rasp.png">
+            </span>
+          </div>
+          <div class="col-1">
+  MEsud
+          </div>
+    
+
+      </section>
+    </div> -->
+   
+
+<div class="col-md-6 col-12">
+    <section widgster [optionsControl]="false" [reloadControl]="false" [fullscreenControl]="false">
+
+        <div class="row">
+        <div class="col-3">
+            <span class="widget-icon">
+              <img src="../../../../assets/img/rasp.png">
+            </span>
+          </div>
+
+          <div class="col-4"> <span class=fw-semi-bold>PI Nodes</span> 
+            <p class="h2 m-6 fw-normal">8</p>
+        </div>
+    </div>
+  
+      <p class="fs-mini text-muted">
+        You can access all nodes  in the Tmobile Test House below using ssh connections
+      </p>
+      <p class="">
+        <button class="btn btn-outline-secondary width-100  mr-3 mb-3" role="button" (click)="node1()">
+          Pi Node-1
+        </button>
+        <button class="btn btn-outline-primary width-100  mr-3 mb-3" role="button" (click)="node2()">
+          Pi Node-2
+        </button>
+        <button class="btn btn-outline-info width-100  mr-3 mb-3" role="button" (click)="node3()">
+          Pi Node-3
+        </button>
+        <button class="btn btn-outline-success width-100  mr-3 mb-3" role="button" (click)="node4()">
+          Pi Node-4
+        </button>
+        <button class="btn btn-outline-warning width-100  mr-3 mb-3" role="button" (click)="node5()">
+          Pi Node-5
+        </button>
+        <button class="btn btn-outline-danger width-100  mr-3 mb-3" role="button" (click)="node6()">
+          Pi Node-6
+        </button>
+        <button class="btn btn-outline-gray width-100  mr-3 mb-3" role="button" (click)="node7()">
+          Pi Node-7
+        </button>
+        <button class="btn btn-outline-inverse width-100 mb-3" role="button" (click)="node8()">
+          Pi Node-8
+        </button>
+      </p>
+    </section>
+  </div>
+  <div class="col-md-6 col-16">
+    <section widgster [optionsControl]="false" [reloadControl]="false" [fullscreenControl]="false">
+        <div class="row">
+            <div class="col-3">
+                <span class="widget-icon">
+                  <i class="fi flaticon-server text-primary"></i>
+                </span>
+              </div>
+    
+              <div class="col-1"> <span class=fw-semi-bold>Servers</span> 
+                <p class="h2 m-6 fw-normal">2</p>
+            </div>
+        </div>
+      <p class="fs-mini text-muted">
+        You can access all servers in the Tmobile Test House  below using ssh connections
+      </p>
+      <p class="">
+        <button class="btn btn-outline-warning btn-rounded width-200  mr-3 mb-3" role="button" (click)="iperfServer()">
+          Iperf Server
+        </button>
+        <br>
+        <button class="btn btn-outline-danger btn-rounded width-200  mr-3 mb-3" role="button" (click)="mainServer()">
+          Main Server
+        </button>
+      </p>
+    </section>
+  </div>
+</div>
+<div>
+<div class="row"> 
+    <div class="col-3"></div>
+    <div ><object type="text/html" [data]= "src" height="750px" width="750" style="overflow:auto;border:0px ridge">
+    </object>
+</div>
+ </div>
+</div>
