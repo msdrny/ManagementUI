@@ -1,7 +1,7 @@
 {
-  "name": "light-blue",
-  "version": "7.1.10",
-  "description": "Light Blue - Angular 4 & React Dashboard",
+  "name": "ManagementUI",
+  "version": "1.0.0",
+  "description": "Management UI",
   "scripts": {
     "analyze": "npm run build:stats && webpack-bundle-analyzer dist/stats.json --port 4201",
     "ng": "ng",

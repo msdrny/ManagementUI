@@ -17,7 +17,7 @@
         </div>
         <div class="stat-item">
           <h6 class="name">Up Time</h6>
-          <p class="value">{{onTime}}</p>
+          <p *ngIf="timer.elapsedTime" class="value">{{timer.elapsedTime}}</p>
         </div>
       </div>
       <div class="progress progress-xs">
@@ -54,6 +54,7 @@
               bindLabel="name" 
               bindValue="id" 
               [(ngModel)]="selectedChannel"
+              (change)="selectedChannelName = $event.name"
               [ngModelOptions]="{standalone: true}"
               >
    </ng-select>
@@ -65,11 +66,11 @@
           <div class="form-group row">
             <label class="col-md-4 col-form-label" for="grouped-select"></label>
             <div class="col-md-8 ">
-              <button class="btn btn-success width-100  mr-3 mb-3" role="button" (click)="runHackrf($event)">
+              <button class="btn btn-success width-100  mr-3 mb-3" role="button" [disabled]="isRun" (click)="runHackrf($event)">
                 Run
               </button>
 
-              <button class="btn btn-danger width-100 mr-3 mb-3" role="button">
+              <button class="btn btn-danger width-100 mr-3 mb-3" role="button" (click)="stopHackrf($event)">
                 Stop
               </button>
             </div>

@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgOption } from '@ng-select/ng-select';
+import * as moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActiveToast, ToastrService } from 'ngx-toastr';
 import { filter, takeUntil } from 'rxjs/operators';
@@ -12,7 +13,7 @@ import { RetryAction } from '../../ui-elements/notifications/toasts/retry-destro
 import { RetryDestroyingToastComponent } from '../../ui-elements/notifications/toasts/retry-destroying/retry-destroying-toast.component';
 import { SuccessToastComponent } from '../../ui-elements/notifications/toasts/suceess/success-toast.component';
 import { defaultData, percentage } from './hackrf.data';
-
+import { isNumeric } from 'rxjs/util/isNumeric';
 @Component({
   selector: 'app-hackrf',
   templateUrl: './hackrf.component.html',
@@ -30,39 +31,50 @@ export class HackrfComponent implements OnInit {
  channelList:NgOption[]=defaultData
  selectedChannel:number
  selectedPercentage: number;
+ selectedChannelName:number=null
  public timeOut: number = 10000;
  percentage = percentage
+ intervalRef;
+ isRun=false;
+ timer = {elapsedTime:null}
  public position: ToastPosition = ToastPosition.bottomRight;
   constructor(private httpClient:HttpClient,private toastr: ToastrService,private spinner: NgxSpinnerService) { }
 
   async ngOnInit(): Promise<void> {
-    this.onTime=await this.getApiResponseForHackrfStatus()
-    console.log(this.channelList)
-    if(this.onTime.includes("00:00"))
+    clearInterval(this.intervalRef);
+    var onTime:string=""+await this.getApiResponseForHackrfStatus()
+    if(isNumeric(onTime))
     {
-      this.status = "Ready for next load"
-      this.className="fa fa-circle fa-fw text-success ml-xs"
-      this.message="There is no noise load on gateway"
-
-
-    } 
-    else if (this.onTime == "error"){
-      this.status = "Disabled"
-      this.className="fa fa-circle-o fa-fw text-gray-light ml-xs"
-      this.message="There is no noise load on gateway"
-    }
-    else{
+      console.log("helhelhelhelhel")
       this.status = "Busy " 
       this.className="fa fa-circle fa-fw text-danger ml-xs"
       this.loadPercentage =this.validateResponse(await this.getCurrentLoad())
-      this.getBarColor(this.loadPercentage)
+      var channel =this.validateResponseForChannel(await this.getCurrentLoad())
+      this.getBarColor(this.loadPercentage,channel)
+      this.isRun=true
+    } 
+    else if (onTime == "error"){
+      this.status = "Disabled"
+      this.className="fa fa-circle-o fa-fw text-gray-light ml-xs"
+      this.message="There is no noise load on gateway"
+      this.isRun=false
+    }
+    else{
 
+      this.status = "Ready for next load"
+      this.className="fa fa-circle fa-fw text-success ml-xs"
+      this.message="There is no noise load on gateway"
+      this.loadPercentage=0
+      this.timer.elapsedTime = `00 00:00:00`
+      this.isRun=false
     }
   }
 
   async getApiResponseForHackrfStatus() {
     return  await this.httpClient.get('http://192.168.10.51:4000/api/getHackrfStatus')
-      .toPromise().then((res:String) => {
+      .toPromise().then((res:any) => {
+        if(isNumeric(res)){ this.setInterval(res)}
+       
 return res;
       }).catch((err: HttpErrorResponse) => {
         // simple logging, but you can do a lot more, see below
@@ -74,10 +86,12 @@ return res;
   async killHackrfProcess() {
     return  await this.httpClient.get('http://192.168.10.51:4000/api/stopHackrfLoad')
       .toPromise().then((res:String) => {
+        this.showSuccessMessage()
 return res;
       }).catch((err: HttpErrorResponse) => {
         // simple logging, but you can do a lot more, see below
         console.log('An error occurred in Http Request'+err.message);
+        this.showUnsuccesfulMessageForKillPRocess()
         return "error" 
       });
   }
@@ -104,7 +118,7 @@ return res;
   }
 
   async getCurrentLoad() {
-    return  await this.httpClient.get("http://192.168.10.105:8086/query?db=rssi&q= select LAST(percentage) from hackrfLoad")
+    return  await this.httpClient.get("http://192.168.10.105:8086/query?db=rssi&q= select LAST(percentage),LAST(channel) from hackrfLoad")
       .toPromise().then((res:Results) => {
       return res;
       }).catch((err: HttpErrorResponse) => {
@@ -137,7 +151,30 @@ if(res.results){
 
  }
 
- private getBarColor(value:Number){
+ private validateResponseForChannel(res:Results){
+  var result= null
+  if(res){
+if(res.results){
+var element= res.results.length
+ if(element>0){
+   var childElement=res.results[0].series.length
+   if(childElement>0){
+     var child=res.results[0].series[0].values.length
+     if(child>0){
+       return res.results[0].series[0].values[0][2]
+
+     }
+   }
+ }
+
+}
+  }
+
+
+
+}
+
+ private getBarColor(value:Number,channel:Number){
    if(value<50){
      this.colorOfBar="success"
    }
@@ -148,20 +185,36 @@ if(res.results){
     this.colorOfBar="danger"
    }
 
-   this.message= "There is %"+value+" noise load on gateway"
+   this.message= "There is %"+value+" noise load on channel "+channel
  }
 
 
 
 public async runHackrf(){
+ 
+  this.spinner.show();
   if(this.selectedChannel,this.selectedPercentage)
   {
-this.killHackrfProcess()
+
+    this.isRun=true
 await this.toggleDevice(this.selectedPercentage,this.selectedChannel)
+await this.insertLoadInfoToDatabase()
+await this.delay(1000);
+await this.ngOnInit()
+
   }
   else{
 alert("Please choose a channel and percentage")
   }
+}
+
+public async stopHackrf(){
+  this.spinner.show();
+ 
+await this.killHackrfProcess()
+await this.delay(1000);
+await this.ngOnInit()
+this.isRun=false
 }
 
 public showUnsuccesfulMessage(percentage,frequency): void {
@@ -200,6 +253,24 @@ public showUnsuccesfulMessage(percentage,frequency): void {
   });
 }
 
+public showUnsuccesfulMessageForKillPRocess(): void {
+
+  const toast: ActiveToast<RetryDestroyingToastComponent> = this.toastr.show(
+    'Error has been faced during operation ',
+    null,
+    {
+      closeButton: true,
+      positionClass: this.position,
+      toastComponent: RetryDestroyingToastComponent,
+      timeOut: this.timeOut,
+      progressBar: true,
+      tapToDismiss: false,
+
+
+    }
+  );
+}
+
 public destroyAlienPlanet(): void {
   this.toastr.show(
     'Alien planet destroyed!',
@@ -227,5 +298,44 @@ public showSuccessMessage(): void {
     }
   );
 }
+
+ setInterval(date){
+  if(date && date!=0){
+   
+var dt= new Date(date)
+console.log(dt)
+let start = moment(new Date(date * 1000));
+ this.intervalRef = setInterval(() => {
+  let elapsedTime = moment(new Date()).diff(start)
+  let time = moment.duration(elapsedTime)
+  console.log( time.days(),elapsedTime,start)
+  let days = ('0' + time.days()).slice();
+  let hrs = ('0' + time.hours()).slice(-2);
+  let mins = ('0' + time.minutes()).slice(-2);
+  let secs = ('0' + time.seconds()).slice(-2);
+
+  this.timer.elapsedTime = `${days} ${hrs}:${mins}:${secs}`
+}, 1000);
+}
+}
+
+insertLoadInfoToDatabase() {
+
+    var body ="hackrfLoad percentage="+this.selectedPercentage+",channel="+this.selectedChannelName
+    let headers = new HttpHeaders();
+    headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
+    this.httpClient.post("http://192.168.10.105:8086/write?db=rssi",body,  {observe: 'response'})
+    .subscribe(resp => {  
+    },
+    (error:HttpErrorResponse) => {         
+      this.spinner.hide();                  
+         //Error callback
+      console.error('error caught in component',error)
+    });
+}
+ delay(ms: number) {
+  return new Promise( resolve => setTimeout(resolve, ms) );
+}
+
  
 }
