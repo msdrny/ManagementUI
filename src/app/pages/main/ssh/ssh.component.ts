@@ -24,45 +24,65 @@ export class SshComponent implements OnInit {
 	}
 
   node1(){
-    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8080");
-    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8181");
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8080");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8181");
   }
   node2(){
-    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8180");
-    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8182");
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8182");
   }
   node3(){
-    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8180");
-    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8183");
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8183");
   }
   node4(){
-    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8180");
-    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8184");
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8184");
   }
   node5(){
-    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8180");
-    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8185");
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8185");
   }
   node6(){
-    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8180");
-    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8186");
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8186");
   }
   node7(){
-    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8180");
-    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8187");
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8187");
   }
   node8(){
-    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8180");
-    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8188");
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8188");
+  }
+  node9(){
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8189");
+  }
+  node10(){
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8190");
+  }
+  node11(){
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8191");
+  }
+  node12(){
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8192");
+  }
+  node13(){
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8193");
   }
   iperfServer(){
-    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8180");
-    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8189");
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8194");
   }
 
   mainServer(){
-    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8180");
-    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.10:8190");
+    // this.url = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8180");
+    this.src = this.sanitizer.bypassSecurityTrustResourceUrl("http://192.168.10.105:8195");
   }
 
 
