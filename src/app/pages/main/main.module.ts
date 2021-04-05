@@ -10,7 +10,7 @@ import { CalendarModule as AngularCalendarModule, DateAdapter, CalendarDateForma
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { ProgressbarModule } from 'ngx-bootstrap/progressbar';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-
+import { FormsModule } from '@angular/forms';
 import { AnalyticsComponent } from './analytics/analytics.component';
 import { BigStatComponent } from './analytics/components/big-stat/big-stat.component';
 import { TaskContainerComponent } from './analytics/components/task-container/task-container.component';
@@ -93,7 +93,7 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     MatRadioModule,
     MatSelectModule,
     NgxDaterangepickerMd.forRoot(),
-    MatSlideToggleModule
+    MatSlideToggleModule,FormsModule
     
   ],
   providers: [

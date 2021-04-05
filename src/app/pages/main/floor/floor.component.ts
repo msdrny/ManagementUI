@@ -196,7 +196,7 @@ chartObject: Highcharts.Chart = null;
 
   public change(event){
     
-    console.log(event.constructor.name)
+    console.log(event)
     if(this.selected){
       if(this.selected.startDate){
         if(this.rangeStatus=="Current"){
@@ -416,7 +416,7 @@ else{
   }
   else{
     console.log(this.dateDifferenceForColSize +" fark budur")
-    this.colSizeOfRSSIWaterfall=80*80
+    this.colSizeOfRSSIWaterfall=130*130
   }
   }
 
@@ -681,7 +681,7 @@ return val;
 
 
   async getApiResponseForPenetration(startDatetime:number,endDatetime:number,difference:number) {
-    return  await this.httpClient.get('http://192.168.10.105:8086/query?db=rssi&q= select Round(mean("Signal")) as Signal, mean("Frequency") as Frequency, mean("Bitrate") as Bitrate from rssi where time>='+startDatetime+' and time<='+endDatetime+' group by time('+difference+'s), wifi,interfaceName')
+    return  await this.httpClient.get('http://192.168.10.105:8086/query?db=rssi&q= select Round(mean("Signal")) as Signal, mean("Frequency") as Frequency, mean("Bitrate") as Bitrate from rssi where time>='+startDatetime+' and time<='+endDatetime+' group by time('+15+'s), wifi,interfaceName')
       .toPromise().then((res:HeatmapResults) => {
 
 return res;
@@ -695,8 +695,8 @@ return res;
 
   async getApiResponseForPenetrationLive() {
   
-    //return  await this.httpClient.get('http://192.168.10.105:8086/query?db=rssi&q= select Round(mean("Signal")) as Signal, mean("Frequency") as Frequency, mean("Bitrate") as Bitrate   from rssi where time>=now()-3600000000000 group by time(15s), wifi,interfaceName')
-     return  await this.httpClient.get('http://192.168.10.105:8086/query?db=rssi&q= select Round(mean("Signal")) as Signal, mean("Frequency") as Frequency, mean("Bitrate") as Bitrate   from rssi where  time>=1614299477000000000 and time<=1614385877000000000 group by time(15s), wifi,interfaceName') 
+    return  await this.httpClient.get('http://192.168.10.105:8086/query?db=rssi&q= select Round(mean("Signal")) as Signal, mean("Frequency") as Frequency, mean("Bitrate") as Bitrate   from rssi where time>=now()-3600000000000 group by time(15s), wifi,interfaceName')
+     //return  await this.httpClient.get('http://192.168.10.105:8086/query?db=rssi&q= select Round(mean("Signal")) as Signal, mean("Frequency") as Frequency, mean("Bitrate") as Bitrate   from rssi where  time>=1614299477000000000 and time<=1614385877000000000 group by time(15s), wifi,interfaceName') 
     .toPromise().then((res:HeatmapResults) => {
 // this.aggregatedSum
 // const temp_row = [
