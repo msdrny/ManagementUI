@@ -29,13 +29,14 @@ import { WidgsterModule } from '../../components/widgster/widgster.module';
 import { UtilsModule } from '../../utils/utils-module/utils.module';
 import { FloorComponent } from './floor/floor.component';
 import { HeatmapComponent } from './heatmap/heatmap.component';
-
+import { ModalModule } from 'ngx-bootstrap/modal';
 import { SshComponent } from './ssh/ssh.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 export const routes = [
@@ -93,7 +94,8 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     MatRadioModule,
     MatSelectModule,
     NgxDaterangepickerMd.forRoot(),
-    MatSlideToggleModule,FormsModule
+    MatSlideToggleModule,FormsModule,
+    ModalModule,NgSelectModule
     
   ],
   providers: [

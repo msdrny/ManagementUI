@@ -1,16 +1,10 @@
 <h1 class="page-title">Dashboard <small><small>The Lucky One</small></small></h1>
+<div (click)="$event.target.id != demoModal ">
 <div class="row">
   <div class="col-lg-7 col-12">
     <section class="bg-transparent" widgster [optionsControl]="false" [reloadControl]="false"
-      [fullscreenControl]="false" [collapseControl]="false" [closeControl]="false">
+      [fullscreenControl]="false" [collapseControl]="false" [closeControl]="false" title="Test House Geo Location">
       <div class="map-wrapper">
-        <div class="stats">
-          <h6 class="mt-1">GEO-LOCATIONS</h6>
-          <p class="h3 m-0">
-            <span class="fw-normal" [countUp]="1656843" [options]="countUpOptions">0</span>
-            <i class="fa fa-map-marker mb-2"></i>
-          </p>
-        </div>
         <div class="map">
           <div #map style="width: 100%; height: 400px"></div>
         </div>
@@ -90,83 +84,54 @@
 </div>
 <div class="row">
   <div class="col-lg-4 col-12">
-    <section widgster [reloadControl]="false" [fullscreenControl]="false" [collapseControl]="false">
-      <h6 *widgsterTitle> USERBASE GROWTH </h6>
-      <div class="stats-row">
-        <div class="stat-item">
-          <h6 class="name">Overall Growth</h6>
-          <p class="value">76.38%</p>
+    <section widgster [optionsControl]="false" [reloadControl]="false" [fullscreenControl]="false">
+      <h6 *widgsterTitle>Count of Total Devices </h6>
+      <div class="row">
+      <div class="col-3">
+          <span class="widget-icon">
+            <img src="../../../../assets/img/rasp.png">
+          </span>
         </div>
-        <div class="stat-item">
-          <h6 class="name">Montly</h6>
-          <p class="value">10.38%</p>
-        </div>
-        <div class="stat-item">
-          <h6 class="name">24h</h6>
-          <p class="value">3.38%</p>
-        </div>
+
+        <div class="col-4">
+           <!-- <span class=fw-semi-bold></span>  -->
+          <p class="h1 m-6 fw-semi-bold text-primary">{{countOfTotalConnectedDevice+countOfTotalDisconnectedDevice}}</p>
       </div>
-      <div class="progress progress-xs">
-        <div class="progress-bar bg-success" style="width: 60%"></div>
-      </div>
-      <p>
-        <small><span class="circle bg-warning"><i style="color: #293647" class="fa fa-chevron-up"></i></span></small>
-        <span class="fw-semi-bold">&nbsp;17% higher</span>
-        than last month</p>
+  </div>
     </section>
   </div>
   <div class="col-lg-4 col-12">
-    <section widgster [reloadControl]="false" [fullscreenControl]="false" [collapseControl]="false">
-      <h6 *widgsterTitle> TRAFFIC VALUES </h6>
-      <div class="stats-row">
-        <div class="stat-item">
-          <h6 class="name">Overall Values</h6>
-          <p class="value">17 567 318</p>
+    <section widgster [optionsControl]="false" [reloadControl]="false" [fullscreenControl]="false">
+      <h6 *widgsterTitle>Count of Online Devices </h6>
+      <div class="row">
+      <div class="col-3">
+          <span class="widget-icon">
+            <img src="../../../../assets/img/rasp.png">
+          </span>
         </div>
-        <div class="stat-item">
-          <h6 class="name">Montly</h6>
-          <p class="value">55 120</p>
-        </div>
-        <div class="stat-item">
-          <h6 class="name">24h</h6>
-          <p class="value">9 695</p>
-        </div>
+
+        <div class="col-4">
+           <!-- <span class=fw-semi-bold></span>  -->
+          <p class="h1 m-6 fw-semi-bold text-success">{{countOfTotalConnectedDevice}}</p>
       </div>
-      <div class="progress progress-xs">
-        <div class="progress-bar bg-danger" style="width: 60%"></div>
-      </div>
-      <p>
-        <small><span class="circle bg-warning"><i style="color: #293647" class="fa fa-chevron-down"></i></span></small>
-        <span class="fw-semi-bold">&nbsp;8% lower</span>
-        than last month
-      </p>
+  </div>
     </section>
   </div>
   <div class="col-lg-4 col-12">
-    <section widgster [reloadControl]="false" [fullscreenControl]="false" [collapseControl]="false">
-      <h6 *widgsterTitle> RANDOM VALUES </h6>
-      <div class="stats-row">
-        <div class="stat-item">
-          <h6 class="name fs-sm">Overcome T.</h6>
-          <p class="value">104.85%</p>
+    <section widgster [optionsControl]="false" [reloadControl]="false" [fullscreenControl]="false">
+      <h6 *widgsterTitle>Count of Offline Devices </h6>
+      <div class="row">
+      <div class="col-3">
+          <span class="widget-icon">
+            <img src="../../../../assets/img/rasp.png">
+          </span>
         </div>
-        <div class="stat-item">
-          <h6 class="name fs-sm">Takeoff Angle</h6>
-          <p class="value">14.29&deg;</p>
-        </div>
-        <div class="stat-item">
-          <h6 class="name fs-sm">World Pop.</h6>
-          <p class="value">7,211M</p>
-        </div>
+
+        <div class="col-4">
+           <span class=fw-semi-bold>  </span> 
+          <p class="h1 m-6 fw-semi-bold text-danger">{{countOfTotalDisconnectedDevice}}</p>
       </div>
-      <div class="progress progress-xs">
-        <div class="progress-bar progress-xs bg-primary" style="width: 60%"></div>
-      </div>
-      <p>
-        <small><span class="circle bg-warning"><i style="color: #293647" class="fa fa-plus"></i></span></small>
-        <span class="fw-semi-bold">&nbsp;8 734 higher</span>
-        than last month
-      </p>
+  </div>
     </section>
   </div>
 </div>
@@ -284,7 +249,7 @@
       </div>
       <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" (eventClicked)="onEventClick($event)">
       </mwl-calendar-month-view>
-      <div class="list-group fs-mini">
+      <!-- <div class="list-group fs-mini">
         <button class="list-group-item text-left text-ellipsis">
           <span class="badge badge-pill badge-warning float-right">6:45</span>
           Weed out the flower bed
@@ -293,7 +258,121 @@
           <span class="badge badge-pill badge-success float-right">9:41</span>
           Stop world water pollution
         </button>
+
+      </div> -->
+      
+      <button class="btn btn-primary mr-sm"  (click)="demoModal.show()">Add New Event</button>
+      <div class="modal fade" bsModal  #demoModal="bs-modal" [config]="{backdrop: 'static'}" >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title pull-left">New Events</h4>
+              <button type="button" class="close pull-right" (click)="demoModal.hide()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <h1 class="page-title"><span class="fw-semi-bold"> </span></h1>
+              <div class="row">
+                <div class="col-lg-12">
+                  <section widgster [fullscreenControl]="false" [collapseControl]="false">
+                    <h6 *widgsterTitle>
+                      Inputs
+                    </h6>
+                    <form class="form-horizontal" role="form">
+                      <fieldset>
+                        <legend><strong>Add Calendar Events</strong></legend>
+                        <div class="form-group row">
+                          <label for="normal-field" class="col-md-4  col-form-label text-md-right">Title</label>
+                          <div class="col-md-7 ">
+                            <input type="text" id="title" class="form-control input-transparent"  [(ngModel)]="selectedEvent" [ngModelOptions]="{standalone: true}"
+                              placeholder="Write a title for event">
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="normal-field" class="col-md-4  col-form-label text-md-right">Color</label>
+                          <div class="col-md-7 ">
+                              <ng-select   placeholder="Select Color"      [(ngModel)]="selectedColor" [ngModelOptions]="{standalone: true}" (change)="selectedColor = $event">
+                              <ng-option *ngFor="let item of colorList" [value]="item.name">{{item.name}}</ng-option>
+                              </ng-select>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="normal-field" class="col-md-4  col-form-label text-md-right">Date</label>
+                          <div class="col-md-7 ">
+                            <input type="text" ngxDaterangepickerMd
+                            [(ngModel)]="selectedDate" [ngModelOptions]="{standalone: true}" placeholder="Choose date"    [singleDatePicker]="true"/>
+                          </div>
+                        </div>
+                      </fieldset>
+                      <div class="form-actions">
+                        <div class="text-center">
+                          <button type="submit" class="btn btn-primary" (click)="addNewEvent()">Save Changes</button>
+                          <button type="button" class="btn btn-inverse ml-xs" (click)="demoModal.hide()">Cancel</button>
+                        </div>
+                      </div>
+                    </form>
+                  </section>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      
+
+
+
+
+
+<button class="btn btn-primary mr-sm"  (click)="deleteModal.show()">Delete Event</button>
+<div class="modal fade" bsModal  #deleteModal="bs-modal" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">Delete Events</h4>
+        <button type="button" class="close pull-right" (click)="deleteModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h1 class="page-title"><span class="fw-semi-bold"> </span></h1>
+        <div class="row">
+          <div class="col-lg-12">
+            <section widgster [fullscreenControl]="false" [collapseControl]="false">
+              <h6 *widgsterTitle>
+                Inputs
+              </h6>
+              <form class="form-horizontal" role="form">
+                <fieldset>
+                  <legend><strong>Delete Calendar Events</strong></legend>
+
+                  <div class="form-group row">
+                    <label for="normal-field" class="col-md-4  col-form-label text-md-right">Events</label>
+                    <div class="col-md-7 ">
+                        <ng-select    placeholder="Select Event"   [(ngModel)]="selectedDeleteEvent" [ngModelOptions]="{standalone: true}" (change)="selectedDeleteEvent =  $event" >
+                          <ng-option *ngFor="let item of deleteList" [value]="item.date +'!@!'+ item.originalTitle">{{item.title}}</ng-option>
+                        </ng-select>
+                    </div>
+                  </div>
+
+                </fieldset>
+                <div class="form-actions">
+                  <div class="text-center">
+                    <button type="submit" class="btn btn-primary" (click)="deleteEvent()">Delete</button>
+                    <button type="button" class="btn btn-inverse ml-xs" (click)="deleteModal.hide()">Cancel</button>
+                  </div>
+                </div>
+              </form>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
     </section>
   </div>
+</div>
 </div>

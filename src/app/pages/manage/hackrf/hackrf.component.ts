@@ -45,7 +45,7 @@ export class HackrfComponent implements OnInit {
     var onTime:string=""+await this.getApiResponseForHackrfStatus()
     if(isNumeric(onTime))
     {
-      console.log("helhelhelhelhel")
+      //console.log("helhelhelhelhel")
       this.status = "Busy " 
       this.className="fa fa-circle fa-fw text-danger ml-xs"
       this.loadPercentage =this.validateResponse(await this.getCurrentLoad())
@@ -71,7 +71,7 @@ export class HackrfComponent implements OnInit {
   }
 
   async getApiResponseForHackrfStatus() {
-    return  await this.httpClient.get('http://192.168.10.51:4000/api/getHackrfStatus')
+    return  await this.httpClient.get('http://192.168.10.105:4000/api/getHackrfStatus')
       .toPromise().then((res:any) => {
         if(isNumeric(res)){ this.setInterval(res)}
        
@@ -84,7 +84,7 @@ return res;
   }
 
   async killHackrfProcess() {
-    return  await this.httpClient.get('http://192.168.10.51:4000/api/stopHackrfLoad')
+    return  await this.httpClient.get('http://192.168.10.105:4000/api/stopHackrfLoad')
       .toPromise().then((res:String) => {
         this.showSuccessMessage()
 return res;
@@ -103,7 +103,7 @@ return res;
 
       let headers = new HttpHeaders();
       headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
-      this.httpClient.post("http://192.168.10.51:4000/api/startHackrfLoad",  {params: httpParams,observe: 'response'})
+      this.httpClient.post("http://192.168.10.105:4000/api/startHackrfLoad",  {params: httpParams,observe: 'response'})
       .subscribe(resp => {
         this.spinner.hide();
         this.showSuccessMessage()
@@ -193,6 +193,7 @@ var element= res.results.length
 public async runHackrf(){
  
   this.spinner.show();
+  this.selectedPercentage=100
   if(this.selectedChannel,this.selectedPercentage)
   {
 

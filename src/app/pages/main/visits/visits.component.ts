@@ -8,7 +8,8 @@ import {
   ChangeDetectionStrategy,
   ViewChild,
   ElementRef,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  Input
 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { useTheme, create, color, Circle, MouseCursorStyle } from '@amcharts/amcharts4/core';
@@ -22,10 +23,21 @@ import { echartDynamicAreaData3 } from '../../../utils/data/echarts.data';
 import { getRandomInt } from '../../../utils/functions/randomizer';
 import { calendarEvents } from '../../../utils/data/calendar-events.data';
 import {citySeries as citySeriesData} from '../../../utils/data/city-series.data';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { CalendarData } from 'src/app/nodes/calendarData';
+import { ConfigService } from 'src/app/helpers/config';
+import {colors} from './visits.data'
+import {url} from './visits.data'
+import * as moment from 'moment';
+import { NgOption } from '@ng-select/ng-select';
+import { ModalDirective } from 'ngx-bootstrap';
+import { MessagesHelper } from 'src/app/helpers/messages';
+
 
 useTheme(am4themes_animated);
 @Component({
   selector: 'visits',
+  providers:[MessagesHelper],
   templateUrl: './visits.template.html',
   styleUrls: ['./visits.style.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -49,18 +61,98 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
   public progressBarValue2$: Observable<number> = this.progressBarValueSource2.asObservable();
   public progressBarValue3$: Observable<number> = this.progressBarValueSource3.asObservable();
   public viewDate: Date = new Date();
-  public events: CalendarEvent[] = [...calendarEvents];
+  public events: any[] ;
+  public colorList=colors
+  public urlList=url
+  public selectedColor
+  public selectedEvent
+  public selectedDeleteEvent
+  public selectedDate
+  public deleteList: NgOption[] =[]
+ public isVisible:boolean
+ public countOfTotalDisconnectedDevice = 0
+ public countOfTotalConnectedDevice = 0
+ @ViewChild('demoModal') public demoModal:ModalDirective;
+ @ViewChild('deleteModal') public deleteModal:ModalDirective;
 
   @ViewChild('map', { static: false }) public mapRef: ElementRef<HTMLElement>;
 
-  constructor(private zone: NgZone, private cdr: ChangeDetectorRef) {
+
+
+  constructor(private zone: NgZone, private cdr: ChangeDetectorRef,private httpClient:HttpClient,private configService:ConfigService,private messageheHelper:MessagesHelper ) {
   }
 
-  public ngOnInit(): void {
+  public async ngOnInit(): Promise<void> {
     const now = new Date();
     this.month = now.getMonth() + 1;
     this.year = now.getFullYear();
+    this.insertLoadInfoToDatabase()
+    for (const iterator of this.urlList) {
+      var result=await this.messageheHelper.getCurrentStatusForDevice(iterator)
+      console.log(result)
+      if(result ==1){
+        this.countOfTotalConnectedDevice=this.countOfTotalConnectedDevice+1
+      }
+      else{
+        this.countOfTotalDisconnectedDevice=this.countOfTotalDisconnectedDevice+1
+      }
+    }
+
+    console.log(this.countOfTotalDisconnectedDevice,this.countOfTotalConnectedDevice)
+  
+
+    console.log(this.selectedColor)
   }
+
+  insertLoadInfoToDatabase() {
+    
+    var date = new  Date ("04/30/2021");
+    console.log(date);
+    // var calendarData= new CalendarData(' <h3 class="popover-header"> Stop world water pollution    </h3>    <div class="popover-body">      Have a kick off meeting with .inc company    </div>',{primary: '#f0b518',secondary: '#f0b518'},new Date(),false,false)
+   
+    // let headers = new HttpHeaders();
+    // headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
+    // // this.httpClient.post(localStorage.getItem('host')+":4000/api/mesud",calendarData,  {observe: 'response'})
+    // this.httpClient.post(localStorage.getItem('host')+":4000/api/mesud",calendarData,  {observe: 'response'})
+    // .subscribe(resp => {  
+    // },
+    // (error:HttpErrorResponse) => {         
+                
+    //      //Error callback
+    //   console.error('error caught in component',error)
+    // });
+
+    // this.httpClient.post(localStorage.getItem('host')+":4000/api/deleteMesud",{"draggable":calendarData.getDraggable},  {observe: 'response'})
+    // .subscribe(resp => {  
+    // },
+    // (error:HttpErrorResponse) => {         
+                
+    //      //Error callback
+    //   console.error('error caught in component',error)
+    // });
+
+    
+    this.httpClient.get(localStorage.getItem('host')+":4000/api/getAllCalendarList").subscribe( (resp:CalendarEvent[])=>
+      {this.events=[]
+        console.log(resp[0])
+        resp.forEach(element => {
+          element.start=new Date(element.start)
+          var titleOfELement= element.title
+          var title = titleOfELement.split("     ")[1]
+          title= title.substring( 0,title.lastIndexOf(" ") );
+          console.log(title)
+          // var title = element.title.substring(
+          //   element.title.lastIndexOf('<div class="popover-body     ">') +72, 
+          //   element.title.lastIndexOf("    </div>") );
+          //  // console.log(title )
+          //  // console.log(element.title)
+            this.deleteList.push({date:element.start,originalTitle:element.title,title:title})
+        });
+      
+        this.events=resp
+        console.log(this.deleteList)
+      })
+}
 
   public ngAfterViewInit(): void {
     setTimeout(() => {
@@ -91,7 +183,7 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
       map.projection = new projections.AlbersUsa();
       const polygonSeries = map.series.push(new MapPolygonSeries());
       polygonSeries.useGeodata = true;
-      map.homeZoomLevel = 1.2;
+      map.homeZoomLevel = 1.1;
       map.chartContainer.wheelable = false;
       map.seriesContainer.draggable = false;
       map.seriesContainer.events.disableType('doublehit');
@@ -100,7 +192,7 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
       map.zoomControl = new ZoomControl();
       map.zoomControl.align = 'left';
       map.zoomControl.valign = 'bottom';
-      map.zoomControl.dy = -20;
+      map.zoomControl.dy = -10;
 
       map.zoomControl.minusButton.background.fill = color('#000');
       map.zoomControl.minusButton.background.fillOpacity = 0.24;
@@ -168,4 +260,61 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }
   }
+
+  public addNewEvent(){
+    console.log("Its Works")
+    console.log(this.selectedColor , this.selectedDate, this.selectedEvent)
+  if(this.selectedColor && this.selectedDate && this.selectedEvent){
+    var startDate = this.selectedDate.startDate.format('MM/DD/YYYY')
+
+    //var startDate= new Date(moment(this.selectedDate).format('MM/DD/YYYY').toString())
+    console.log(startDate)
+    var calendarData= new CalendarData(' <h3 class="popover-header">   </h3>    <div class="popover-body">     '+this.selectedEvent+'    </div>',{primary: this.selectedColor,secondary: '#f0b518'},new Date(startDate),false,false)
+   
+    let headers = new HttpHeaders();
+    headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
+    // this.httpClient.post(localStorage.getItem('host')+":4000/api/mesud",calendarData,  {observe: 'response'})
+    this.httpClient.post(localStorage.getItem('host')+":4000/api/mesud",calendarData,  {observe: 'response', responseType: 'text'})
+    .subscribe(resp => { 
+      console.log("Event is added successfully")
+      this.insertLoadInfoToDatabase()
+       this.demoModal.hide()
+       this.messageheHelper.showSuccessMessage()
+    },
+    (error:HttpErrorResponse) => {         
+      
+      this.messageheHelper.showUnsuccesfulMessage()
+      console.error('error caught in component',error)
+    });
+  }
+  else{
+    alert("Fill the the inputs")
+
+  }
+}
+
+public deleteEvent(){
+  if(this.selectedDeleteEvent){
+ var data=this.selectedDeleteEvent.split("!@!")
+       this.httpClient.post(localStorage.getItem('host')+":4000/api/deleteMesud",{"start":new Date(data[0]),title:data[1]},  {observe: 'response', responseType: 'text'})
+    .subscribe(resp => {  
+      this.insertLoadInfoToDatabase()
+      this.deleteModal.hide()
+      this.messageheHelper.showSuccessMessage()
+    },
+    (error:HttpErrorResponse) => {         
+    this.messageheHelper.showUnsuccesfulMessage()
+         //Error callback
+         this.deleteModal.hide()
+      console.error('error caught in component',error)
+    });
+
+  }
+  else{
+    alert("Please select event")
+  }
+console.log(this.selectedDeleteEvent)
+}
+
+
 }
