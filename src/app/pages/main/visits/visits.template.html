@@ -135,6 +135,65 @@
     </section>
   </div>
 </div>
+
+
+
+<div class="row">
+  <div class="col-lg-4 col-12">
+    <section widgster [optionsControl]="false" [reloadControl]="false" [fullscreenControl]="false">
+      <h6 *widgsterTitle>Count of Total Client </h6>
+      <div class="row">
+      <div class="col-3">
+          <span class="widget-icon">
+            <img src="../../../../assets/img/wifiAdapter.png">
+          </span>
+        </div>
+
+        <div class="col-4">
+           <!-- <span class=fw-semi-bold></span>  -->
+          <p class="h1 m-6 fw-semi-bold text-primary">{{countOfTotalClient}}</p>
+      </div>
+  </div>
+    </section>
+  </div>
+  <div class="col-lg-4 col-12">
+    <section widgster [optionsControl]="false" [reloadControl]="false" [fullscreenControl]="false">
+      <h6 *widgsterTitle>Count of Online Devices </h6>
+      <div class="row">
+      <div class="col-3">
+          <span class="widget-icon">
+            <img src="../../../../assets/img/wifiAdapter.png">
+          </span>
+        </div>
+
+        <div class="col-4">
+           <!-- <span class=fw-semi-bold></span>  -->
+          <p class="h1 m-6 fw-semi-bold text-success">{{countOfTotalConnecteClient}}</p>
+      </div>
+  </div>
+    </section>
+  </div>
+  <div class="col-lg-4 col-12">
+    <section widgster [optionsControl]="false" [reloadControl]="false" [fullscreenControl]="false">
+      <h6 *widgsterTitle>Count of Offline Client </h6>
+      <div class="row">
+      <div class="col-3">
+          <span class="widget-icon">
+            <img src="../../../../assets/img/wifiAdapter.png">
+          </span>
+        </div>
+
+        <div class="col-4">
+           <span class=fw-semi-bold>  </span> 
+          <p class="h1 m-6 fw-semi-bold text-danger">{{countOfTotalDisconnectedClient}}</p>
+      </div>
+  </div>
+    </section>
+  </div>
+</div>
+
+
+
 <div class="row">
   <div class="col-lg-4 col-12">
     <section widgster [optionsControl]="false" [fullscreenControl]="false" [collapseControl]="false" bodyClass="p-0"

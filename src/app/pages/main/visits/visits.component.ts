@@ -72,10 +72,12 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
  public isVisible:boolean
  public countOfTotalDisconnectedDevice = 0
  public countOfTotalConnectedDevice = 0
+ public countOfTotalClient = 0
+ public countOfTotalConnecteClient = 0
+ public countOfTotalDisconnectedClient = 0
  @ViewChild('demoModal') public demoModal:ModalDirective;
  @ViewChild('deleteModal') public deleteModal:ModalDirective;
-
-  @ViewChild('map', { static: false }) public mapRef: ElementRef<HTMLElement>;
+@ViewChild('map', { static: false }) public mapRef: ElementRef<HTMLElement>;
 
 
 
@@ -87,7 +89,16 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.month = now.getMonth() + 1;
     this.year = now.getFullYear();
     this.insertLoadInfoToDatabase()
+    var resultForClient:any=await this.messageheHelper.getCurrentStatusForClient()
+    if(resultForClient){
+      if(resultForClient.up){
+        this.countOfTotalClient = resultForClient.up + resultForClient.down
+        this.countOfTotalDisconnectedClient = resultForClient.down
+        this.countOfTotalConnecteClient = resultForClient.up
+      }
+    }
     for (const iterator of this.urlList) {
+     
       var result=await this.messageheHelper.getCurrentStatusForDevice(iterator)
       console.log(result)
       if(result ==1){

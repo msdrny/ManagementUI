@@ -5,7 +5,6 @@ import * as moment from 'moment';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActiveToast, ToastrService } from 'ngx-toastr';
 import { filter, takeUntil } from 'rxjs/operators';
-import { HeatmapResults } from 'src/service/InfluxDBHeatmapHistory';
 import { Results } from 'src/service/InfluxDBResults';
 import { ToastPosition } from '../../ui-elements/notifications/toast-position.enum';
 import { CancelLaunchToastComponent } from '../../ui-elements/notifications/toasts/cancel-launch/cancel-launch-toast.component';
