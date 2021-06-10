@@ -37,7 +37,7 @@ import { NgxDaterangepickerMd } from 'ngx-daterangepicker-material';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgSelectModule } from '@ng-select/ng-select';
-
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 export const routes = [
   { path: '', redirectTo: 'visits', pathMatch: 'full' },
@@ -95,7 +95,7 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     MatSelectModule,
     NgxDaterangepickerMd.forRoot(),
     MatSlideToggleModule,FormsModule,
-    ModalModule,NgSelectModule
+    ModalModule,NgSelectModule,NgxDatatableModule
     
   ],
   providers: [

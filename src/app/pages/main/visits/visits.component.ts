@@ -32,6 +32,7 @@ import * as moment from 'moment';
 import { NgOption } from '@ng-select/ng-select';
 import { ModalDirective } from 'ngx-bootstrap';
 import { MessagesHelper } from 'src/app/helpers/messages';
+import { SSIDStatus } from 'src/service/currentBssidSsidForClient';
 
 
 useTheme(am4themes_animated);
@@ -75,6 +76,7 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
  public countOfTotalClient = 0
  public countOfTotalConnecteClient = 0
  public countOfTotalDisconnectedClient = 0
+ public ssidList=[]
  @ViewChild('demoModal') public demoModal:ModalDirective;
  @ViewChild('deleteModal') public deleteModal:ModalDirective;
 @ViewChild('map', { static: false }) public mapRef: ElementRef<HTMLElement>;
@@ -100,7 +102,7 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
     for (const iterator of this.urlList) {
      
       var result=await this.messageheHelper.getCurrentStatusForDevice(iterator)
-      console.log(result)
+      //console.log(result)
       if(result ==1){
         this.countOfTotalConnectedDevice=this.countOfTotalConnectedDevice+1
       }
@@ -109,10 +111,21 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
-    console.log(this.countOfTotalDisconnectedDevice,this.countOfTotalConnectedDevice)
+    var ssid:SSIDStatus=await this.messageheHelper.getCurrentBssidSsidforClient()
+    this.ssidList=[]
+    if(ssid.data.result){
+      var res=ssid.data.result
+      for (const iterator of res) {
+        this.ssidList.push(iterator.metric)
+      }
+
+    }
+   console.log(this.ssidList) 
+
+    //console.log(this.countOfTotalDisconnectedDevice,this.countOfTotalConnectedDevice)
   
 
-    console.log(this.selectedColor)
+   // console.log(this.selectedColor)
   }
 
   insertLoadInfoToDatabase() {
@@ -145,13 +158,13 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
     
     this.httpClient.get(localStorage.getItem('host')+":4000/api/getAllCalendarList").subscribe( (resp:CalendarEvent[])=>
       {this.events=[]
-        console.log(resp[0])
+        //console.log(resp[0])
         resp.forEach(element => {
           element.start=new Date(element.start)
           var titleOfELement= element.title
           var title = titleOfELement.split("     ")[1]
           title= title.substring( 0,title.lastIndexOf(" ") );
-          console.log(title)
+         // console.log(title)
           // var title = element.title.substring(
           //   element.title.lastIndexOf('<div class="popover-body     ">') +72, 
           //   element.title.lastIndexOf("    </div>") );
@@ -161,7 +174,7 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
         });
       
         this.events=resp
-        console.log(this.deleteList)
+        //console.log(this.deleteList)
       })
 }
 
