@@ -1,0 +1,34 @@
+<div class="comments" *ngIf="postComment!==undefined">
+    <h6 *ngIf="postComment?.length<1">No Comments found</h6>
+    <ul *ngIf="postComment?.length>0">
+        <li *ngFor="let post of postComment; let i = index;">
+            <div class="col-12 col-sm-12 comment-container">
+                    <p style="background-color: azure;color: black; margin: 0px 0px 16px; padding: 6px 10px; font: -apple-system,BlinkMacSystemFont;">{{post.commentTxt}}</p>
+                    <div>
+                
+                        <span style="color:white; font: 12px -apple-system,BlinkMacSystemFont;">{{post.currentDate | date: 'dd/MM/yyyy'}}</span>
+                        
+                        &nbsp;&nbsp;
+                        <!-- <button class="btn btn-sm btn-info" (click)="replyComment(i)">
+                            Reply
+                        </button> -->
+                      
+                        
+                        <button class="btn btn-sm btn-danger" (click)="removeComment(i)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                </div>
+                <!-- <div class="childCommentBox">
+                    <div datacontainer></div>
+                    <ul *ngIf="post?.replyComment?.length>0">
+                        <li *ngFor="let rl of post.replyComment">
+                            <div class="col-12 col-sm-12 comment-container">
+                                    <p>{{rl.commentTxt}}</p>
+                            </div>
+                        </li>
+                    </ul>            
+                </div>                 -->
+            </div>
+        </li>
+    </ul>
+</div>

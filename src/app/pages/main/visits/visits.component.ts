@@ -1,15 +1,10 @@
 import {
-  Component,
-  OnInit,
   ViewEncapsulation,
-  AfterViewInit,
   OnDestroy,
   NgZone,
   ChangeDetectionStrategy,
-  ViewChild,
-  ElementRef,
   ChangeDetectorRef,
-  Input
+  Input,
 } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { useTheme, create, color, Circle, MouseCursorStyle } from '@amcharts/amcharts4/core';
@@ -17,28 +12,32 @@ import { MapChart, MapPolygonSeries, projections, ZoomControl, MapImageSeries } 
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import am4geodata_usaHigh from '@amcharts/amcharts4-geodata/usaHigh';
 import { CalendarEvent } from 'angular-calendar';
-
+import { Component, AfterViewInit, ViewChild, ElementRef, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { echartDynamicAreaData3 } from '../../../utils/data/echarts.data';
 import { getRandomInt } from '../../../utils/functions/randomizer';
-import { calendarEvents } from '../../../utils/data/calendar-events.data';
 import {citySeries as citySeriesData} from '../../../utils/data/city-series.data';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { CalendarData } from 'src/app/nodes/calendarData';
 import { ConfigService } from 'src/app/helpers/config';
 import {colors} from './visits.data'
 import {url} from './visits.data'
-import * as moment from 'moment';
 import { NgOption } from '@ng-select/ng-select';
 import { ModalDirective } from 'ngx-bootstrap';
 import { MessagesHelper } from 'src/app/helpers/messages';
+import { TimeHelper } from 'src/app/helpers/timeHelper';
 import { SSIDStatus } from 'src/service/currentBssidSsidForClient';
+import { isNumeric } from 'rxjs/util/isNumeric';
+import * as moment from 'moment';
+import { TestMetadata } from 'src/service/TestMetadata';
+
 
 
 useTheme(am4themes_animated);
 @Component({
   selector: 'visits',
-  providers:[MessagesHelper],
+  providers:[MessagesHelper,TimeHelper],
   templateUrl: './visits.template.html',
   styleUrls: ['./visits.style.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -76,17 +75,46 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
  public countOfTotalClient = 0
  public countOfTotalConnecteClient = 0
  public countOfTotalDisconnectedClient = 0
+ public cityName
+ public dataForMap=citySeriesData
  public ssidList=[]
+ public isActiveTest:boolean
  @ViewChild('demoModal') public demoModal:ModalDirective;
  @ViewChild('deleteModal') public deleteModal:ModalDirective;
 @ViewChild('map', { static: false }) public mapRef: ElementRef<HTMLElement>;
+intervalRef;
+isRun=false;
+timer = {elapsedTime:null}
+status
+className
+message
+elapsedTime=0
+loadPercentage=0
+commentForm: FormGroup;
+commentInfo: Array<object> = [];
+submitted: Boolean = false;
+public id = 0;
+public hardwareVersion
+public softwareVersion
+public estimatedEndDate
+@Output() usercomment = new EventEmitter();
+  comments: any;
+  count: any;
 
 
-
-  constructor(private zone: NgZone, private cdr: ChangeDetectorRef,private httpClient:HttpClient,private configService:ConfigService,private messageheHelper:MessagesHelper ) {
+  constructor(private zone: NgZone, private cdr: ChangeDetectorRef,private httpClient:HttpClient,private configService:ConfigService,private messageheHelper:MessagesHelper,private timeHelper:TimeHelper,private formBuilder: FormBuilder ) {
   }
 
   public async ngOnInit(): Promise<void> {
+    this.createForm();
+
+   await this.loadCurrentTestStatus()
+   console.log(this.isActiveTest,"here is the test")
+  
+    await this.getApiResponseForTestMetadata()
+
+   this.cityName=this.dataForMap[0].tooltip
+
     const now = new Date();
     this.month = now.getMonth() + 1;
     this.year = now.getFullYear();
@@ -126,6 +154,69 @@ export class VisitsComponent implements OnInit, AfterViewInit, OnDestroy {
   
 
    // console.log(this.selectedColor)
+  }
+  async loadCurrentTestStatus() {
+   // throw new Error('Method not implemented.');
+    clearInterval(this.intervalRef);
+    var onTime:string=""+await this.getApiResponseForTestStatus()
+    if(isNumeric(onTime))
+    {
+      //console.log("helhelhelhelhel")
+      this.status = "Test is running " 
+      this.className="fa fa-circle fa-fw text-danger ml-xs"
+      this.message="There is an active test"
+      this.isActiveTest=true
+    } 
+    else if (onTime == "error"){
+      this.status = "Error"
+      this.className="fa fa-circle-o fa-fw text-gray-light ml-xs"
+      this.message="There is a problem which the system cannot access server"
+      this.isActiveTest=false
+    }
+    else{
+
+      this.status = "Ready for next test"
+      this.className="fa fa-circle fa-fw text-success ml-xs"
+      this.message="There is no an active test"
+      this.timer.elapsedTime = `00 00:00:00`
+      this.isActiveTest=false
+
+    }
+  }
+
+  async getApiResponseForTestStatus() {
+    //return  await this.httpClient.get('http://192.168.10.105:4000/api/getTestStatus')
+    return  await this.httpClient.get('http://127.0.0.1:4000/api/getTestStatus')
+      .toPromise().then(async (res:any) => {
+        if(isNumeric(res)){ await this.setInterval(res)}
+       
+return res;
+      }).catch((err: HttpErrorResponse) => {
+        // simple logging, but you can do a lot more, see below
+        console.log('An error occurred in Http Request'+err.message);
+        return "error" 
+      });
+  }
+
+ async setInterval(date){
+    if(date && date!=0){
+     
+  //var dt= new Date(date)
+  console.log(date)
+  let start = moment(new Date(date * 1000));
+   this.intervalRef = setInterval(() => {
+    this.elapsedTime = moment(new Date()).diff(start)
+    let time = moment.duration(this.elapsedTime)
+    console.log( time.days(),this.elapsedTime,start)
+    let days = ('0' + time.days()).slice();
+    let hrs = ('0' + time.hours()).slice(-2);
+    let mins = ('0' + time.minutes()).slice(-2);
+    let secs = ('0' + time.seconds()).slice(-2);
+  console.log(this.elapsedTime)
+   this.loadPercentage=(this.elapsedTime*100)/864000000
+    this.timer.elapsedTime = `${days} ${hrs}:${mins}:${secs}`
+  }, 1000);
+  }
   }
 
   insertLoadInfoToDatabase() {
@@ -338,6 +429,59 @@ public deleteEvent(){
     alert("Please select event")
   }
 console.log(this.selectedDeleteEvent)
+}
+
+createForm() {
+  this.commentForm = this.formBuilder.group({
+    comment: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]]
+  });
+}
+
+onSubmit() {
+  this.submitted = true;
+  // stop here if form is invalid
+  if (this.commentForm.invalid) {
+    return false;
+  } else {
+    this.commentInfo.push({
+      commentId : this.id++,
+      currentDate : new Date(),
+      commentTxt: this.commentForm.controls['comment'].value,
+      replyComment: []
+    });
+    this.usercomment.emit(this.commentInfo);
+  }
+}
+
+async getApiResponseForTestMetadata() {
+  var url =localStorage.getItem('host')+":4000/api/getTestMetaData"
+  //return  await this.httpClient.get('http://192.168.10.105:4000/api/getTestStatus')
+  return  await this.httpClient.get(url)
+    .toPromise().then(async (res:TestMetadata) => {
+      if(res){
+        console.log(res.estimated_end_time,res.hardware_version,res.software_version)
+        this.estimatedEndDate=res.estimated_end_time
+        this.hardwareVersion=res.hardware_version
+       this.softwareVersion=res.software_version
+      }
+     
+return res;
+    }).catch((err: HttpErrorResponse) => {
+      // simple logging, but you can do a lot more, see below
+      console.log('An error occurred in Http Request'+err.message);
+      return "error" 
+    });
+}
+
+receiveComment($event) {
+  this.comments = $event;
+  this.count = this.comments.length;
+  console.log(this.comments.length);
+}
+
+recieveCount($event) {
+  this.comments = $event;
+  this.count = this.comments.length;
 }
 
 

@@ -38,6 +38,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { CommentboxComponent } from './visits/commentbox/commentbox.component';
+import { CommentsComponent } from './visits/comments/comments.component';
+import { ChildboxComponent } from './visits/childbox/childbox.component';
+import {  ReactiveFormsModule} from '@angular/forms';
 
 export const routes = [
   { path: '', redirectTo: 'visits', pathMatch: 'full' },
@@ -69,7 +73,10 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     RealtimeTrafficWidgetComponent,
     FloorComponent,
     HeatmapComponent,
-    SshComponent
+    SshComponent,
+    CommentboxComponent,
+    CommentsComponent,
+    ChildboxComponent
   ],
   imports: [
     CommonModule,
@@ -96,6 +103,7 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     NgxDaterangepickerMd.forRoot(),
     MatSlideToggleModule,FormsModule,
     ModalModule,NgSelectModule,NgxDatatableModule
+    ,ReactiveFormsModule,
     
   ],
   providers: [
@@ -108,6 +116,7 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
       provide: CalendarDateFormatter,
       useClass: CustomDateFormatter
     }
-  ]
+  ],
+  entryComponents: [ChildboxComponent],
 })
 export class MainModule { }

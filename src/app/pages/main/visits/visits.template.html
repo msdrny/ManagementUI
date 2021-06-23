@@ -1,4 +1,4 @@
-<h1 class="page-title">Dashboard <small><small>The Lucky One</small></small></h1>
+<h1 class="page-title">Dashboard <small><small>{{cityName}}</small></small></h1>
 <div (click)="$event.target.id != demoModal ">
 <div class="row">
   <div class="col-lg-7 col-12">
@@ -15,70 +15,37 @@
   <div class="col-lg-4 col-12">
     <section class="bg-transparent" widgster controlsClass="widget-controls-hover" [fullscreenControl]="false"
       [collapseControl]="false">
-      <h5 *widgsterTitle>Map <span class="fw-semi-bold">Statistics</span></h5>
-      <p>Status: <strong>Live</strong></p>
+      <h5 *widgsterTitle>Current <span class="fw-semi-bold">Status</span></h5>
+      <p> <strong><p class="value">{{status}} &nbsp;&nbsp;&nbsp;&nbsp; <span [class]="className"></span></p></strong></p>
       <p>
-        <span class="circle bg-warning"><i style="color: #293647" class="fa fa-map-marker"></i></span>
-        146 Countries, 2759 Cities
+        <p>Up Time: <strong> <p *ngIf="timer.elapsedTime" class="value">{{timer.elapsedTime}}</p> </strong></p>
+        <p  *ngIf="isActiveTest">Hardware Version: <strong> <p *ngIf="isActiveTest" class="value">{{hardwareVersion}}</p> </strong></p>
+        <p  *ngIf="isActiveTest">Software Version: <strong> <p *ngIf="isActiveTest" class="value">{{softwareVersion}}</p> </strong></p>
+        <p  *ngIf="isActiveTest">Estimated End Date: <strong> <p *ngIf="isActiveTest" class="value">{{estimatedEndDate}}</p> </strong></p>
+   
+
+        <div class="row progress-stats">
+          <div class="col-md-9 col-12">
+            <h6 class="name"></h6>
+            <p class="description deemphasize">Elapsed Time</p>
+            <div class="progress progress-xs">
+              <progressbar type="danger" [animate]="true" [value]="loadPercentage" [max]="100" [animate]="true" [striped]="true" >
+              </progressbar>
+            </div>
+          </div>
+          <div class="col-md-3 col-12 text-center">
+            <span style="width: 2.5rem; height: 2.5rem; background: #222D3C;display: flex;justify-content: center;flex-direction: column;" class="status rounded">
+              <small><span [countUp]="loadPercentage" [options]="countUpOptions">0</span>%</small>
+            </span>
+          </div>
+        </div>
+        
+        <p>
+        <!-- <span class="circle bg-warning"><i style="color: #293647" class="fa fa-map-marker"></i></span> -->
+        <span class="glyphicon glyphicon-signal"></span>  &nbsp;&nbsp;{{message}}
+       
       </p>
-      <div class="row progress-stats">
-        <div class="col-md-9 col-12">
-          <h6 class="name">Foreign Visits</h6>
-          <p class="description deemphasize">Some Cool Text</p>
-          <div class="progress progress-xs">
-            <progressbar [animate]="true" [value]="progressBarValue1$ | async" [max]="100"></progressbar>
-          </div>
-        </div>
-        <div class="col-md-3 col-12 text-center">
-          <span style="width: 2.5rem; height: 2.5rem; background: #222D3C;display: flex;justify-content: center;flex-direction: column;" class="status rounded">
-            <small><span [countUp]="progressBarValue1$ | async" [options]="countUpOptions">0</span>%</small>
-          </span>
-        </div>
-      </div>
-      <div class="row progress-stats">
-        <div class="col-md-9 col-12">
-          <h6 class="name">Local Visits</h6>
-          <p class="description deemphasize">P. to C. Conversion</p>
-          <div class="progress progress-xs">
-            <progressbar type="danger" [animate]="true" [value]="progressBarValue2$ | async" [max]="100">
-            </progressbar>
-          </div>
-        </div>
-        <div class="col-md-3 col-12 text-center">
-          <span style="width: 2.5rem; height: 2.5rem; background: #222D3C;display: flex;justify-content: center;flex-direction: column;" class="status rounded">
-            <small><span [countUp]="progressBarValue2$ | async" [options]="countUpOptions">0</span>%</small>
-          </span>
-        </div>
-      </div>
-      <div class="row progress-stats">
-        <div class="col-md-9 col-12">
-          <h6 class="name">Sound Frequencies</h6>
-          <p class="description deemphasize">Average Bitrate</p>
-          <div class="progress  progress-xs">
-            <progressbar type="success" [animate]="true" [value]="progressBarValue3$ | async" [max]="100">
-            </progressbar>
-          </div>
-        </div>
-        <div class="col-md-3 col-12 text-center">
-          <span style="width: 2.5rem; height: 2.5rem; background: #222D3C;display: flex;justify-content: center;flex-direction: column;" class="status rounded">
-            <small><span [countUp]="progressBarValue3$ | async" [options]="countUpOptions">0</span>%</small>
-          </span>
-        </div>
-      </div>
-      <h6 class="fw-semi-bold mt">Map Distributions</h6>
-      <p>Tracking: <strong>Active</strong></p>
-      <p>
-        <span class="circle bg-warning"><i style="color: #293647" class="fa fa-cog"></i></span>
-        391 elements installed, 84 sets
-      </p>
-      <div class="input-group mt">
-        <input type="text" class="form-control input-transparent" placeholder="Search Map">
-        <span class="input-group-btn">
-          <button type="submit" class="btn btn-default">
-            <i class="fa fa-search text-gray-dark"></i>
-          </button>
-        </span>
-      </div>
+      
     </section>
   </div>
 </div>
@@ -195,10 +162,10 @@
 
 
 <div class="row">
-  <div class="col-lg-5 col-12">
+  <div class="col-lg-4 col-12">
     <section widgster [optionsControl]="false" [fullscreenControl]="false" [collapseControl]="false" bodyClass="p-0"
       footerClass="bg-widget-transparent mt">
-      <h6 *widgsterTitle><span class="badge badge-danger">New</span> Messages</h6>
+     
       <ngx-datatable class="table table-striped table-hover" [rows]="ssidList"  [columnMode]="force" [sortType]="single" 
       [headerHeight]="'auto'"[footerHeight]="'auto'" [rowHeight]="'auto'" [limit]="6" [scrollbarH]="true">
       <ngx-datatable-column name="instance">
@@ -226,12 +193,11 @@
     </ngx-datatable>
     </section>
   </div>
-  <div class="col-lg-3 col-12">
+  <div class="col-lg-4 col-12">
     <section class="market-stats" widgster [reloadControl]="false" [optionsControl]="false" [collapseControl]="false"
       [fullscreenControl]="false" [collapseControl]="true">
-      <h6 *widgsterTitle> Market <span class="fw-semi-bold">Stats</span> </h6>
-      <h3>$720 Earned</h3>
-      <p class="fs-mini text-muted mb mt-sm">
+      <h6 *widgsterTitle> Test House <span class="fw-semi-bold">Comments</span> </h6>
+      <!-- <p class="fs-mini text-muted mb mt-sm">
         Target <span class="fw-semi-bold">$820</span> day earnings
         is <span class="fw-semi-bold">96%</span> reached.
       </p>
@@ -275,7 +241,24 @@
       </div>
       <div class="mt-5 chart-overflow-bottom" market-stats-widget height="130px" [options]="echartDynamicAreaData3"
         [merge]="echartDynamicAreaDataUpdate">
-      </div>
+      </div> -->
+      <div class="container">
+        <div class="card">
+            <div class="commentbox">
+                <div class="col-12 col-sm-12 header">
+                    <h4>Comments ({{count}})</h4>
+                </div>
+                <div class="col-12 col-sm-12 body">
+                    <div class="comment-container">
+                            <div class="comment-form">
+                                    <app-commentbox (usercomment)="receiveComment($event)"></app-commentbox>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            <app-comments [postComment]="comments" (countComments)="recieveCount($event)"></app-comments>
+        </div>
+    </div>
     </section>
   </div>
   <div class="col-lg-4 col-12">
