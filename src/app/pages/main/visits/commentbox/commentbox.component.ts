@@ -1,6 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, AfterViewInit, ViewChild, ElementRef, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MessagesHelper } from 'src/app/helpers/messages';
 
 @Component({
   selector: 'app-commentbox',
@@ -15,7 +16,7 @@ export class CommentboxComponent implements OnInit {
   public id = 0;
   @Output() usercomment = new EventEmitter();
 
-  constructor(private formBuilder: FormBuilder,private httpClient:HttpClient) { }
+  constructor(private formBuilder: FormBuilder,private httpClient:HttpClient,private messageheHelper:MessagesHelper) { }
 
   ngOnInit() {
     this.createForm();
@@ -37,30 +38,32 @@ export class CommentboxComponent implements OnInit {
         commentId : this.id++,
         currentDate : new Date(),
         commentTxt: this.commentForm.controls['comment'].value,
-        replyComment: []
+        //replyComment: []
       });
+      var data ={"comment":this.commentForm.controls['comment'].value,"insertDate": (new Date()).toLocaleDateString(),"date": new Date()}
+      this. getApiResponseForTestMetadata(data)
       this.usercomment.emit(this.commentInfo);
     }
   }
 
-  //  getApiResponseForTestMetadata() {
-  //   var url =localStorage.getItem('host')+":4000/api/getTestMetaData"
-  //   let headers = new HttpHeaders();
-  //   headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
-  //   // this.httpClient.post(localStorage.getItem('host')+":4000/api/mesud",calendarData,  {observe: 'response'})
-  //   this.httpClient.post(localStorage.getItem('host')+":4000/api/addComment",calendarData,)
-  //   .subscribe(resp => { 
-  //     console.log("Event is added successfully")
-  //     this.insertLoadInfoToDatabase()
-  //      this.demoModal.hide()
-  //      this.messageheHelper.showSuccessMessage()
-  //   },
-  //   (error:HttpErrorResponse) => {         
+   getApiResponseForTestMetadata(commentInfo) {
+    var url =localStorage.getItem('host')+":4000/api/getTestMetaData"
+    let headers = new HttpHeaders();
+    headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
+    // this.httpClient.post(localStorage.getItem('host')+":4000/api/mesud",calendarData,  {observe: 'response'})
+    this.httpClient.post(localStorage.getItem('host')+":4000/api/addComment",commentInfo,{observe: 'response', responseType: 'text'})
+    .subscribe(resp => { 
+      console.log("Event is added successfully")
       
-  //     this.messageheHelper.showUnsuccesfulMessage()
-  //     console.error('error caught in component',error)
-  //   });
-  // }
+      // this.demoModal.hide()
+       this.messageheHelper.showSuccessMessage()
+    },
+    (error:HttpErrorResponse) => {         
+      
+      this.messageheHelper.showUnsuccesfulMessage()
+      console.error('error caught in component',error)
+    });
+  }
 
 
 }

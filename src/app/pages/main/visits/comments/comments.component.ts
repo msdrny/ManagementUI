@@ -1,5 +1,8 @@
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, Input, Output, OnChanges, EventEmitter,
   Directive, ViewContainerRef, ViewChildren, QueryList, ComponentFactoryResolver, AfterContentInit} from '@angular/core';
+import { MessagesHelper } from 'src/app/helpers/messages';
+import { Comments } from 'src/service/comments';
 import { ChildboxComponent } from '../childbox/childbox.component';
 
 @Directive({
@@ -32,7 +35,7 @@ export class CommentsComponent implements OnInit, OnChanges{
   automatically update the object items for you. */
   @ViewChildren (DatacontainerDirective) entry: QueryList<DatacontainerDirective>;
 
-  constructor(private resolver: ComponentFactoryResolver) { }
+  constructor(private resolver: ComponentFactoryResolver,private httpClient:HttpClient,private messageheHelper:MessagesHelper) { }
 
   ngOnInit() {
   }
@@ -45,8 +48,12 @@ export class CommentsComponent implements OnInit, OnChanges{
   }
 
   removeComment(no) {
-    this.postComment.splice(no, 1);
+ 
     console.log('After remove array====>', this.postComment);
+    var x:any= this.postComment[no]
+    x.commentTxt
+    this.deleteComment({"comment":x.commentTxt,"date":x.currentDate})
+    this.postComment.splice(no, 1);
     this.countComments.emit(this.postComment);
   }
 
@@ -82,6 +89,50 @@ export class CommentsComponent implements OnInit, OnChanges{
     });
     console.log(this.reply);
     this.loadComponent = false;
+  }
+
+  
+  deleteComment(commentInfo) {
+    var url =localStorage.getItem('host')+":4000/api/getTestMetaData"
+    let headers = new HttpHeaders();
+    headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
+    // this.httpClient.post(localStorage.getItem('host')+":4000/api/mesud",calendarData,  {observe: 'response'})
+    this.httpClient.post(localStorage.getItem('host')+":4000/api/deleteComment",commentInfo,{observe: 'response', responseType: 'text'})
+    .subscribe(resp => { 
+      console.log("Event is deleted successfully")
+      
+      // this.demoModal.hide()
+       this.messageheHelper.showSuccessMessage()
+    },
+    (error:HttpErrorResponse) => {         
+      
+      this.messageheHelper.showUnsuccesfulMessage()
+      console.error('error caught in component',error)
+    });
+  }
+
+  getAllCommentsFromDatabase(){
+
+    this.httpClient.get(localStorage.getItem('host')+":4000/api/getAllCalendarList").subscribe( (resp:Comments[])=>
+    {
+      //console.log(resp[0])
+      resp.forEach(element => {
+        // element.start=new Date(element.start)
+        // var titleOfELement= element.title
+        // var title = titleOfELement.split("     ")[1]
+        // title= title.substring( 0,title.lastIndexOf(" ") );
+       // console.log(title)
+        // var title = element.title.substring(
+        //   element.title.lastIndexOf('<div class="popover-body     ">') +72, 
+        //   element.title.lastIndexOf("    </div>") );
+        //  // console.log(title )
+        //  // console.log(element.title)
+         // this.deleteList.push({date:element.start,originalTitle:element.title,title:title})
+      });
+    
+    
+      //console.log(this.deleteList)
+    })
   }
 
 
