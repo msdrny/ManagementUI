@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Component, AfterViewInit, ViewChild, ElementRef, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MessagesHelper } from 'src/app/helpers/messages';
+import { Comments } from 'src/service/comments';
 
 @Component({
   selector: 'app-commentbox',
@@ -12,6 +13,7 @@ export class CommentboxComponent implements OnInit {
 
   commentForm: FormGroup;
   commentInfo: Array<object> = [];
+  @Input() deletedComments: Array<object> = [];
   submitted: Boolean = false;
   public id = 0;
   @Output() usercomment = new EventEmitter();
@@ -20,6 +22,14 @@ export class CommentboxComponent implements OnInit {
 
   ngOnInit() {
     this.createForm();
+    console.log("mesud erenay")
+    this.getAllCommentsFromDatabase()
+  }
+
+  ngOnChanges() {
+    if (this.deletedComments !== undefined) {
+      console.log('Oppppss Something deleted', this.deletedComments);
+    }
   }
 
   createForm() {
@@ -30,23 +40,31 @@ export class CommentboxComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    
     // stop here if form is invalid
     if (this.commentForm.invalid) {
       return false;
     } else {
-      this.commentInfo.push({
-        commentId : this.id++,
+     
+
+      this.commentInfo.forEach(element => {
+        var x:any= element
+        x.commentId++
+      });
+      this.commentInfo.unshift({
+        commentId : 0,
         currentDate : new Date(),
         commentTxt: this.commentForm.controls['comment'].value,
         //replyComment: []
       });
       var data ={"comment":this.commentForm.controls['comment'].value,"insertDate": (new Date()).toLocaleDateString(),"date": new Date()}
-      this. getApiResponseForTestMetadata(data)
+      this. addNewRow(data)
+      this.commentInfo = [... this.commentInfo]
       this.usercomment.emit(this.commentInfo);
     }
   }
 
-   getApiResponseForTestMetadata(commentInfo) {
+  addNewRow(commentInfo) {
     var url =localStorage.getItem('host')+":4000/api/getTestMetaData"
     let headers = new HttpHeaders();
     headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
@@ -63,6 +81,43 @@ export class CommentboxComponent implements OnInit {
       this.messageheHelper.showUnsuccesfulMessage()
       console.error('error caught in component',error)
     });
+  }
+
+  getAllCommentsFromDatabase(){
+    this.httpClient.get(localStorage.getItem('host')+":4000/api/getAllComments").subscribe( (resp:Comments[])=>
+    {
+      
+    
+      resp.forEach(element => {
+        console.log(resp)
+       // this.postComment.push(null)
+       this.commentInfo.push({
+        commentId : this.id++,
+        currentDate : element.date,
+        commentTxt: element.comment,
+        //replyComment: []
+      });
+
+
+        
+
+        // element.start=new Date(element.start)
+        // var titleOfELement= element.title
+        // var title = titleOfELement.split("     ")[1]
+        // title= title.substring( 0,title.lastIndexOf(" ") );
+       // console.log(title)
+        // var title = element.title.substring(
+        //   element.title.lastIndexOf('<div class="popover-body     ">') +72, 
+        //   element.title.lastIndexOf("    </div>") );
+        //  // console.log(title )
+        //  // console.log(element.title)
+         // this.deleteList.push({date:element.start,originalTitle:element.title,title:title})
+      });
+      this.commentInfo = [... this.commentInfo]
+      this.usercomment.emit(this.commentInfo)
+    
+      //console.log(this.deleteList)
+    })
   }
 
 

@@ -102,11 +102,11 @@ public estimatedEndDate
   count: any;
 
 
-  constructor(private zone: NgZone, private cdr: ChangeDetectorRef,private httpClient:HttpClient,private configService:ConfigService,private messageheHelper:MessagesHelper,private timeHelper:TimeHelper,private formBuilder: FormBuilder ) {
+  constructor(private zone: NgZone, private cdr: ChangeDetectorRef,private httpClient:HttpClient,private configService:ConfigService,private messageheHelper:MessagesHelper,private timeHelper:TimeHelper ) {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.createForm();
+   
 
    await this.loadCurrentTestStatus()
    console.log(this.isActiveTest,"here is the test")
@@ -431,27 +431,7 @@ public deleteEvent(){
 console.log(this.selectedDeleteEvent)
 }
 
-createForm() {
-  this.commentForm = this.formBuilder.group({
-    comment: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(100)]]
-  });
-}
 
-onSubmit() {
-  this.submitted = true;
-  // stop here if form is invalid
-  if (this.commentForm.invalid) {
-    return false;
-  } else {
-    this.commentInfo.push({
-      commentId : this.id++,
-      currentDate : new Date(),
-      commentTxt: this.commentForm.controls['comment'].value,
-      replyComment: []
-    });
-    this.usercomment.emit(this.commentInfo);
-  }
-}
 
 async getApiResponseForTestMetadata() {
   var url =localStorage.getItem('host')+":4000/api/getTestMetaData"
@@ -475,6 +455,7 @@ return res;
 
 receiveComment($event) {
   this.comments = $event;
+  
   this.count = this.comments.length;
   console.log(this.comments.length);
 }
@@ -482,6 +463,8 @@ receiveComment($event) {
 recieveCount($event) {
   this.comments = $event;
   this.count = this.comments.length;
+  this.receiveComment($event)
+  console.log($event);
 }
 
 

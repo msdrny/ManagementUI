@@ -1,6 +1,10 @@
+<ngx-spinner [fullScreen]="false" type="ball-clip-rotate-multiple" size="medium">
+  <p class="loading">Operation is running...</p>
+</ngx-spinner>
+
 <div class="comments" *ngIf="postComment!==undefined">
     <h6 *ngIf="postComment?.length<1">No Comments found</h6>
-    <ul *ngIf="postComment?.length>0">
+    <!-- <ul *ngIf="postComment?.length>0">
         <li *ngFor="let post of postComment; let i = index;">
             <div class="col-12 col-sm-12 comment-container">
                     <p style="background-color: azure;color: black; margin: 0px 0px 16px; padding: 6px 10px; font: -apple-system,BlinkMacSystemFont;">{{post.commentTxt}}</p>
@@ -9,15 +13,15 @@
                         <span style="color:white; font: 12px -apple-system,BlinkMacSystemFont;">{{post.currentDate | date: 'dd/MM/yyyy'}}</span>
                         
                         &nbsp;&nbsp;
-                        <!-- <button class="btn btn-sm btn-info" (click)="replyComment(i)">
+                         <button class="btn btn-sm btn-info" (click)="replyComment(i)">
                             Reply
                         </button> -->
                       
                         
-                        <button class="btn btn-sm btn-danger" (click)="removeComment(i)">
+                        <!-- <button class="btn btn-sm btn-danger" (click)="removeComment(i)">
                             <i class="fa fa-trash"></i>
                         </button>
-                </div>
+                </div> -->
                 <!-- <div class="childCommentBox">
                     <div datacontainer></div>
                     <ul *ngIf="post?.replyComment?.length>0">
@@ -28,7 +32,36 @@
                         </li>
                     </ul>            
                 </div>                 -->
-            </div>
+            <!-- </div>
         </li>
-    </ul>
+    </ul>  -->
+
+    <ngx-datatable class="table table-striped table-hover" [rows]="postComment"  [columnMode]="standard" [sortType]="single" 
+    [headerHeight]="'auto'"[footerHeight]="'auto'" [rowHeight]="'auto'" [limit]="6" [scrollbarH]="true"  *ngIf="postComment?.length>0" >
+    <ngx-datatable-column name="Commnets"   prop="commentTxt">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        
+        <p style="background-color: azure;color: black; margin: 0px 0px 16px; padding: 6px 10px; font: -apple-system,BlinkMacSystemFont;">{{value}}</p>
+      </ng-template>
+    </ngx-datatable-column >
+    <!-- <ngx-datatable-column name="device">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <span class="fw-semi-bold">{{value}}</span>
+      </ng-template>
+    </ngx-datatable-column> -->
+    <ngx-datatable-column name="Date"  prop="currentDate" [width]="120">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <span style="color:white; font: 12px -apple-system,BlinkMacSystemFont;">{{value | date: 'dd/MM/yyyy'}}</span>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="" prop="commentId"  [width]="50">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <button class="btn btn-sm btn-danger" (click)="removeComment(value)">
+            <i class="fa fa-trash"></i>
+        </button>
+      </ng-template>
+    </ngx-datatable-column>
+
+
+  </ngx-datatable>
 </div>

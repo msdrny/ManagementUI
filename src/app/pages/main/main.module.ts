@@ -42,6 +42,7 @@ import { CommentboxComponent } from './visits/commentbox/commentbox.component';
 import { CommentsComponent } from './visits/comments/comments.component';
 import { ChildboxComponent } from './visits/childbox/childbox.component';
 import {  ReactiveFormsModule} from '@angular/forms';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 export const routes = [
   { path: '', redirectTo: 'visits', pathMatch: 'full' },
@@ -103,7 +104,7 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     NgxDaterangepickerMd.forRoot(),
     MatSlideToggleModule,FormsModule,
     ModalModule,NgSelectModule,NgxDatatableModule
-    ,ReactiveFormsModule,
+    ,ReactiveFormsModule,NgxSpinnerModule
     
   ],
   providers: [

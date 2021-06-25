@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit, Input, Output, OnChanges, EventEmitter,
   Directive, ViewContainerRef, ViewChildren, QueryList, ComponentFactoryResolver, AfterContentInit} from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { MessagesHelper } from 'src/app/helpers/messages';
 import { Comments } from 'src/service/comments';
 import { ChildboxComponent } from '../childbox/childbox.component';
@@ -35,9 +36,10 @@ export class CommentsComponent implements OnInit, OnChanges{
   automatically update the object items for you. */
   @ViewChildren (DatacontainerDirective) entry: QueryList<DatacontainerDirective>;
 
-  constructor(private resolver: ComponentFactoryResolver,private httpClient:HttpClient,private messageheHelper:MessagesHelper) { }
+  constructor(private resolver: ComponentFactoryResolver,private httpClient:HttpClient,private messageheHelper:MessagesHelper,private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
+   
   }
 
 
@@ -47,55 +49,31 @@ export class CommentsComponent implements OnInit, OnChanges{
     }
   }
 
+
   removeComment(no) {
- 
+    console.log(no)
     console.log('After remove array====>', this.postComment);
     var x:any= this.postComment[no]
-    x.commentTxt
+    if(x){
+
     this.deleteComment({"comment":x.commentTxt,"date":x.currentDate})
     this.postComment.splice(no, 1);
-    this.countComments.emit(this.postComment);
-  }
-
-  replyComment(index) {
-    this.loadComponent = true;
-    const myFactory = this.resolver.resolveComponentFactory(ChildboxComponent);
-    if (this.entry.toArray()[index].viewContainerRef.length <= 0 ) {
-      const myRef = this.entry.toArray()[index].viewContainerRef.createComponent(myFactory);
-      myRef.instance['commentNo'] = index;
-      myRef.changeDetectorRef.detectChanges();
-      myRef.instance.userReplycomment.subscribe(
-        data => {
-          console.log('Piyali=>', data);
-          this.receiveReplyComment(data, index);
-        }
-      );
-      myRef.instance.deletNo.subscribe(
-        no => {
-          myRef.destroy();
-        }
-      );
+    this.resetCommentId()
+    this.postComment = [...this.postComment]
+   // console.log( this.postComment)
+   console.log("After Remove data ",this.postComment)
+   this.countComments.emit(this.postComment);
     }
+    
   }
 
-  receiveReplyComment($event, i) {
-    this.reply = $event;
-    console.log($event);
-    this.postComment.forEach((element) => {
-      if (element['commentId'] === i) {
-        element['replyComment'].push(...$event);
-        console.log('Main array after reply comment=>', this.postComment);
-      }
-    });
-    console.log(this.reply);
-    this.loadComponent = false;
-  }
 
   
   deleteComment(commentInfo) {
     var url =localStorage.getItem('host')+":4000/api/getTestMetaData"
     let headers = new HttpHeaders();
     headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
+    this.spinner.show()
     // this.httpClient.post(localStorage.getItem('host')+":4000/api/mesud",calendarData,  {observe: 'response'})
     this.httpClient.post(localStorage.getItem('host')+":4000/api/deleteComment",commentInfo,{observe: 'response', responseType: 'text'})
     .subscribe(resp => { 
@@ -105,35 +83,23 @@ export class CommentsComponent implements OnInit, OnChanges{
        this.messageheHelper.showSuccessMessage()
     },
     (error:HttpErrorResponse) => {         
-      
+      this.spinner.hide()
       this.messageheHelper.showUnsuccesfulMessage()
       console.error('error caught in component',error)
     });
+    this.spinner.hide()
   }
 
-  getAllCommentsFromDatabase(){
-
-    this.httpClient.get(localStorage.getItem('host')+":4000/api/getAllCalendarList").subscribe( (resp:Comments[])=>
-    {
-      //console.log(resp[0])
-      resp.forEach(element => {
-        // element.start=new Date(element.start)
-        // var titleOfELement= element.title
-        // var title = titleOfELement.split("     ")[1]
-        // title= title.substring( 0,title.lastIndexOf(" ") );
-       // console.log(title)
-        // var title = element.title.substring(
-        //   element.title.lastIndexOf('<div class="popover-body     ">') +72, 
-        //   element.title.lastIndexOf("    </div>") );
-        //  // console.log(title )
-        //  // console.log(element.title)
-         // this.deleteList.push({date:element.start,originalTitle:element.title,title:title})
-      });
-    
-    
-      //console.log(this.deleteList)
-    })
+  resetCommentId(){
+    var index = 0
+    this.postComment.forEach(element => {
+      var item:any =element
+      item.commentId= index
+      index =index+1
+    });
   }
+
+
 
 
 }
