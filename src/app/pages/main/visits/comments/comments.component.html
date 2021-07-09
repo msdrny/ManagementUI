@@ -38,7 +38,7 @@
 
     <ngx-datatable class="table table-striped table-hover" [rows]="postComment"  [columnMode]="standard" [sortType]="single" 
     [headerHeight]="'auto'"[footerHeight]="'auto'" [rowHeight]="'auto'" [limit]="6" [scrollbarH]="true"  *ngIf="postComment?.length>0" >
-    <ngx-datatable-column name="Commnets"   prop="commentTxt">
+    <ngx-datatable-column name="Comments"   prop="commentTxt">
       <ng-template let-value="value" ngx-datatable-cell-template>
         
         <p style="background-color: azure;color: black; margin: 0px 0px 16px; padding: 6px 10px; font: -apple-system,BlinkMacSystemFont;">{{value}}</p>

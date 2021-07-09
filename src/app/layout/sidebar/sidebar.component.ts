@@ -20,7 +20,8 @@ export class Sidebar implements OnInit, AfterViewInit {
     tablesCollapsed: true,
     mapsCollapsed: true,
     extraCollapsed: true,
-    levelsCollapsed: true
+    levelsCollapsed: true,
+    testReportCollapsed: true
   };
 
   constructor(
@@ -101,4 +102,5 @@ export interface SidebarState {
   mapsCollapsed: boolean;
   extraCollapsed: boolean;
   levelsCollapsed: boolean;
+  testReportCollapsed:boolean;
 }

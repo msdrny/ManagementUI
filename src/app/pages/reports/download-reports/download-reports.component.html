@@ -1,0 +1,87 @@
+<h1 class="page-title">Test Reports <small><small>Download</small></small></h1>
+<div class="row">
+  <div class="col-lg-4 col-12">
+    <div class="container">
+      <div class="card">
+    <section widgster [optionsControl]="false" [fullscreenControl]="false" [collapseControl]="false" bodyClass="p-0"
+      footerClass="bg-widget-transparent mt">
+     
+      <!-- <ngx-datatable class="table table-striped table-hover" [rows]="testReports"  [columnMode]="standard" [sortType]="single" 
+      [headerHeight]="'auto'"[footerHeight]="'auto'" [rowHeight]="'auto'" [limit]="6" [scrollbarH]="true">
+      <ngx-datatable-column name="name" >
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <p style=" margin: 0px 0px 16px; padding: 6px 10px; font: -apple-system,BlinkMacSystemFont;">{{value}}</p>
+        </ng-template>
+      </ngx-datatable-column >
+      <ngx-datatable-column name="date">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+           {{value}}
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="url"  >
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          {{value}}
+        </ng-template>
+      </ngx-datatable-column>
+
+ 
+    </ngx-datatable> -->
+
+
+    <ngx-datatable class="table table-striped table-hover" [rows]="testReports"  [columnMode]="standard" [sortType]="single" 
+    [headerHeight]="'auto'"[footerHeight]="'auto'" [rowHeight]="'auto'" [limit]="6" [scrollbarH]="true"  >
+    <ngx-datatable-column name="Document Name"   prop="name" [width]="120" >
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        
+       {{value}}
+      </ng-template>
+    </ngx-datatable-column >
+    <!-- <ngx-datatable-column name="device">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <span class="fw-semi-bold">{{value}}</span>
+      </ng-template>
+    </ngx-datatable-column> -->
+    <ngx-datatable-column name="Date"  prop="date" [width]="120">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <span style="color:white; font: 12px -apple-system,BlinkMacSystemFont;">{{value }}</span>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column name="" prop="url"  [width]="50">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <button class="btn btn-success social-button" (click)="downloadTestReport(value)" >
+            <i class="glyphicon glyphicon-download-alt"></i>
+        </button>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="" prop="url"  [width]="50">
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <button class="btn btn-warning social-button" (click)="showTestReport(value)" >
+          <i class="glyphicon glyphicon-eye-open"></i>
+        </button>
+      </ng-template>
+    </ngx-datatable-column>
+
+
+  </ngx-datatable>
+
+
+    </section>
+  </div>
+</div>
+</div>
+
+
+
+
+  <div class="col-lg-8 col-12">
+
+     
+      <ngx-extended-pdf-viewer [src]="doc"  [showPresentationModeButton]="true" [showBookmarkButton]="false" useBrowserLocale="true" height="80vh"></ngx-extended-pdf-viewer>
+ 
+  
+  </div>
+
+
+</div>
+

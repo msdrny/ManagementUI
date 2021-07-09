@@ -28,13 +28,7 @@ export class CommentsComponent implements OnInit, OnChanges{
   public commentIndex = 0;
   public reply: Array<object> = [];
 
-  // @ViewChildren decorator to grab elements from the host view
-  /* The return type of ViewChildren is QueryList.
-  QueryList is just a fancy name for an object that stores
-  a list of items. What is special about this object is
-  when the state of the application changes Angular will
-  automatically update the object items for you. */
-  @ViewChildren (DatacontainerDirective) entry: QueryList<DatacontainerDirective>;
+
 
   constructor(private resolver: ComponentFactoryResolver,private httpClient:HttpClient,private messageheHelper:MessagesHelper,private spinner: NgxSpinnerService) { }
 

@@ -16,7 +16,16 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "assets": ["src/assets"],
+            "assets": ["src/assets",  {
+              "glob": "**/*",
+              "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+              "output": "/assets/"
+            },
+            {
+              "glob": "**/*",
+              "input": "node_modules/ngx-extended-pdf-viewer/bleeding-edge/",
+              "output": "/bleeding-edge/"
+            }],
             "styles": [
               "src/app/styles/application.scss",
               "node_modules/ngx-markdown-editor/assets/highlight.js/agate.min.css"

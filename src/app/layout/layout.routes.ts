@@ -8,6 +8,7 @@ const routes: Routes = [
       { path: 'main', loadChildren: () => import('../pages/main/main.module').then(module => module.MainModule) },
      // { path: 'management', loadChildren: () => import('../pages/management/management.module').then(module => module.ManagementModule) },
       { path: 'management', loadChildren: () => import('../pages/manage/manage.module').then(module => module.ManageModule) },
+      { path: 'reports', loadChildren: () => import('../pages/reports/reports.module').then(module => module.ReportsModule) },
       { path: 'inbox', loadChildren: () => import('../pages/inbox/inbox.module').then(module => module.InboxModule) },
       { path: 'charts', loadChildren: () => import('../pages/charts/charts.module').then(module => module.ChartsModule) },
       { path: 'profile', loadChildren: () => import('../pages/profile/profile.module').then(module => module.ProfileModule) },
