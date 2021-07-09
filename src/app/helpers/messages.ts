@@ -94,6 +94,26 @@ public showUnsuccesfulMessage(): void {
 
 }
 
+
+public showUnsuccesfulSpecificMessage(errorMessage): void {
+
+  const toast: ActiveToast<RetryDestroyingToastComponent> = this.toastr.show(
+    errorMessage,
+    null,
+    {
+      closeButton: true,
+      positionClass: this.position,
+      toastComponent: RetryDestroyingToastComponent,
+      timeOut: this.timeOut,
+      progressBar: true,
+      tapToDismiss: false,
+
+
+    }
+  );
+
+}
+
 public async getCurrentStatusForClient(){
   console.log("Its Works")
   // const now = Date.now();

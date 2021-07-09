@@ -1,19 +1,20 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
 import { TestReport } from 'src/service/testReports';
 import { saveAs } from 'file-saver';
-import { path } from '@amcharts/amcharts4/core';
+import { MessagesHelper } from 'src/app/helpers/messages';
+import { ErrorMessages } from 'src/app/utils/data/errorMessages.data';
 @Component({
   selector: 'app-download-reports',
+  providers:[MessagesHelper],
   templateUrl: './download-reports.component.html',
   styleUrls: ['./download-reports.component.scss']
 })
 export class DownloadReportsComponent implements OnInit {
 public doc
 public testReports =  []
-  constructor(private httpClient:HttpClient,private sanitizer: DomSanitizer) {pdfDefaultOptions.assetsFolder = 'bleeding-edge'; }
+  constructor(private httpClient:HttpClient,private messageHelper:MessagesHelper) {pdfDefaultOptions.assetsFolder = 'bleeding-edge'; }
 
    ngOnInit() {
     //this.getCurrentStatusForDevice()
@@ -32,7 +33,8 @@ public testReports =  []
       console.log(resp)
       this.testReports=resp
     },
-    (error:HttpErrorResponse) => {         
+    (error:HttpErrorResponse) => {    
+      this.messageHelper.showUnsuccesfulSpecificMessage(ErrorMessages.SHOW_LIST_ERROR)     
       console.error('error caught in component',error)
     });
 }
@@ -48,7 +50,8 @@ public testReports =  []
         console.log(this.doc)       
         
       },
-      (error:HttpErrorResponse) => {         
+      (error:HttpErrorResponse) => {
+        this.messageHelper.showUnsuccesfulSpecificMessage(ErrorMessages.SHOW_FILE_ERROR)           
         console.error('error caught in component',error)
       });
   }
@@ -70,8 +73,10 @@ public testReports =  []
         var path = url.split("/")
         console.log(path)
         saveAs(blob,path[path.length-1]);
+        this.messageHelper.showSuccessMessage()
     },
-    (error:HttpErrorResponse) => {         
+    (error:HttpErrorResponse) => {       
+      this.messageHelper.showUnsuccesfulSpecificMessage(ErrorMessages.DOWNLOAD_FILE_ERROR)    
       console.error('error caught in component',error)
     });
   }
