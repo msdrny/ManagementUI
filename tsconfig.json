@@ -10,7 +10,9 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es5",
-    "lib": ["es2018", "dom"]
+    "lib": ["es2018", "dom"],
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

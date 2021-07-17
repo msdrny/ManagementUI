@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Component, AfterViewInit, ViewChild, ElementRef, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MessagesHelper } from 'src/app/helpers/messages';
+import { ApiList } from 'src/app/utils/data/apiList.data';
 import { Comments } from 'src/service/comments';
 
 @Component({
@@ -65,11 +66,10 @@ export class CommentboxComponent implements OnInit {
   }
 
   addNewRow(commentInfo) {
-    var url =localStorage.getItem('host')+":4000/api/getTestMetaData"
     let headers = new HttpHeaders();
     headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
     // this.httpClient.post(localStorage.getItem('host')+":4000/api/mesud",calendarData,  {observe: 'response'})
-    this.httpClient.post(localStorage.getItem('host')+":4000/api/addComment",commentInfo,{observe: 'response', responseType: 'text'})
+    this.httpClient.post(ApiList.ADD_COMMENT,commentInfo,{observe: 'response', responseType: 'text'})
     .subscribe(resp => { 
       console.log("Event is added successfully")
       
@@ -84,7 +84,7 @@ export class CommentboxComponent implements OnInit {
   }
 
   getAllCommentsFromDatabase(){
-    this.httpClient.get(localStorage.getItem('host')+":4000/api/getAllComments").subscribe( (resp:Comments[])=>
+    this.httpClient.get(ApiList.SHOW_ALL_COMMENT).subscribe( (resp:Comments[])=>
     {
       
     

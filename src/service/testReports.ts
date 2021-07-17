@@ -3,4 +3,5 @@ export interface TestReport {
     url: String;
     view: String;
     date: Date;
+    sortDate:Date
   }

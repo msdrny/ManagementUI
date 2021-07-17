@@ -13,6 +13,7 @@ import { RetryDestroyingToastComponent } from '../../ui-elements/notifications/t
 import { SuccessToastComponent } from '../../ui-elements/notifications/toasts/suceess/success-toast.component';
 import { defaultData, percentage } from './hackrf.data';
 import { isNumeric } from 'rxjs/util/isNumeric';
+import { ApiList } from 'src/app/utils/data/apiList.data';
 @Component({
   selector: 'app-hackrf',
   templateUrl: './hackrf.component.html',
@@ -70,7 +71,7 @@ export class HackrfComponent implements OnInit {
   }
 
   async getApiResponseForHackrfStatus() {
-    return  await this.httpClient.get('http://192.168.10.105:4000/api/getHackrfStatus')
+    return  await this.httpClient.get(ApiList.CURRENT_HACKRF_STATUS)
       .toPromise().then((res:any) => {
         if(isNumeric(res)){ this.setInterval(res)}
        
@@ -83,7 +84,7 @@ return res;
   }
 
   async killHackrfProcess() {
-    return  await this.httpClient.get('http://192.168.10.105:4000/api/stopHackrfLoad')
+    return  await this.httpClient.get(ApiList.STOP_HACKRF_LOAD)
       .toPromise().then((res:String) => {
         this.showSuccessMessage()
 return res;
@@ -102,7 +103,7 @@ return res;
 
       let headers = new HttpHeaders();
       headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
-      this.httpClient.post("http://192.168.10.105:4000/api/startHackrfLoad",  {params: httpParams,observe: 'response'})
+      this.httpClient.post(ApiList.START_HACKRF_LOAD,  {params: httpParams,observe: 'response'})
       .subscribe(resp => {
         this.spinner.hide();
         this.showSuccessMessage()
@@ -117,7 +118,7 @@ return res;
   }
 
   async getCurrentLoad() {
-    return  await this.httpClient.get("http://192.168.10.105:8086/query?db=rssi&q= select LAST(percentage),LAST(channel) from hackrfLoad")
+    return  await this.httpClient.get(ApiList.CURRENT_HACKRF_LOAD)
       .toPromise().then((res:Results) => {
       return res;
       }).catch((err: HttpErrorResponse) => {
@@ -324,7 +325,7 @@ insertLoadInfoToDatabase() {
     var body ="hackrfLoad percentage="+this.selectedPercentage+",channel="+this.selectedChannelName
     let headers = new HttpHeaders();
     headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
-    this.httpClient.post("http://192.168.10.105:8086/write?db=rssi",body,  {observe: 'response'})
+    this.httpClient.post(ApiList.INSERT_LOAD_INFO_INFLUX,body,  {observe: 'response'})
     .subscribe(resp => {  
     },
     (error:HttpErrorResponse) => {         

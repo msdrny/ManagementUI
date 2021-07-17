@@ -19,6 +19,7 @@ NoDataToDisplay(Highcharts);
 import { LocaleConfig } from 'ngx-daterangepicker-material/daterangepicker.config';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError} from 'rxjs/operators';
+import { ApiList } from 'src/app/utils/data/apiList.data';
 
 @Component({
   selector: 'app-floor',
@@ -333,6 +334,8 @@ this.channelMap.set(element[1],element[2])
     var series = [];
     try{
    if( (startDate==null && this.destroyFlag==false) || (startDate!=null && startDate!=undefined && this.destroyFlag==true) ){
+    var number= response.results[0].series
+    if(number){
     response.results[0].series.forEach(row => {
       var eachRow =row
       row.values.forEach(element => {
@@ -375,6 +378,7 @@ else{
 
       })
     })
+  }
   }
   } catch (error) {
     console.log(error.stack)
@@ -681,7 +685,7 @@ return val;
 
 
   async getApiResponseForPenetration(startDatetime:number,endDatetime:number,difference:number) {
-    return  await this.httpClient.get('http://192.168.10.105:8086/query?db=rssi&q= select Round(mean("Signal")) as Signal, mean("Frequency") as Frequency, mean("Bitrate") as Bitrate from rssi where time>='+startDatetime+' and time<='+endDatetime+' group by time('+15+'s), wifi,interfaceName')
+    return  await this.httpClient.get(ApiList.INFLUXDB+'/query?db=rssi&q= select Round(mean("Signal")) as Signal, mean("Frequency") as Frequency, mean("Bitrate") as Bitrate from rssi where time>='+startDatetime+' and time<='+endDatetime+' group by time('+difference+'s), wifi,interfaceName')
       .toPromise().then((res:HeatmapResults) => {
 
 return res;
@@ -695,7 +699,7 @@ return res;
 
   async getApiResponseForPenetrationLive() {
   
-    return  await this.httpClient.get('http://192.168.10.105:8086/query?db=rssi&q= select Round(mean("Signal")) as Signal, mean("Frequency") as Frequency, mean("Bitrate") as Bitrate   from rssi where time>=now()-3600000000000 group by time(15s), wifi,interfaceName')
+    return  await this.httpClient.get(ApiList.LIVE_WATERFALL_RSSI)
      //return  await this.httpClient.get('http://192.168.10.105:8086/query?db=rssi&q= select Round(mean("Signal")) as Signal, mean("Frequency") as Frequency, mean("Bitrate") as Bitrate   from rssi where  time>=1614299477000000000 and time<=1614385877000000000 group by time(15s), wifi,interfaceName') 
     .toPromise().then((res:HeatmapResults) => {
 // this.aggregatedSum
@@ -755,7 +759,7 @@ return res;
 
 
   async getApiResponseForChannel() {
-    return  await this.httpClient.get('http://192.168.10.105:8086/query?db=rssi&q= select frequency,channel from channel')
+    return  await this.httpClient.get(ApiList.CHANNEL_LIST)
       .toPromise().then((res:HeatmapResults) => {
 // this.aggregatedSum
 // const temp_row = [

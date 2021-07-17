@@ -4,6 +4,7 @@ import {  Results } from '../../../../service/InfluxDBResults';
 import { interval, Subscription } from 'rxjs';
 import { HeatmapResults } from 'src/service/InfluxDBHeatmapHistory';
 import { IwdevInfo } from 'src/service/IwdevInfo';
+import { ApiList } from 'src/app/utils/data/apiList.data';
 
 @Component({
   selector: 'app-heatmap',
@@ -791,6 +792,8 @@ public tipCtxUpstairs : CanvasRenderingContext2D
     //console.log(response)
     if(response){
       this.tooltipDetails=new Map();
+      var number= response.results[0].series
+      if(number){
         response.results[0].series.forEach(row => {
          
           row.values.forEach(element => {
@@ -870,8 +873,10 @@ console.log(channel)
     
      
         });
-    
+      }
         
+    
+        console.log("buraya kadar geldi")
         this.ctx = this.canvas.nativeElement.getContext('2d');
         var imageObj = new Image();
         imageObj.src = '../../../assets/img/kitchen.png';
@@ -929,11 +934,6 @@ console.log(channel)
             }
             this.node220Draw(node220,this.ctx);
             this.node240Draw(node240,this.ctx);
-            
-    
-    
-    
-    
         }
       }
       else{
@@ -1393,7 +1393,7 @@ console.log(channel)
     
     
       async getApiResponseThroughput() {
-        return  await this.httpClient.get("http://192.168.10.105:8086/query?db=rssi&q= select interfaceName,Signal,Bitrate,Frequency,SSID from rssi where time>now()-10000000000  group by wifi")
+        return  await this.httpClient.get(ApiList.FLOOR_PLAN_DATA)
           .toPromise().then((res:Results) => {
     // this.aggregatedSum
     // const temp_row = [
@@ -1615,7 +1615,7 @@ console.log(channel)
 
     
     async getApiResponseForChannel() {
-      return  await this.httpClient.get('http://192.168.10.105:8086/query?db=rssi&q= select frequency,channel from channel')
+      return  await this.httpClient.get(ApiList.CHANNEL_LIST)
         .toPromise().then((res:HeatmapResults) => {
   return res;
         }).catch((err: HttpErrorResponse) => {

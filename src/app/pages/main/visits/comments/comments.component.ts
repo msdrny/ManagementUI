@@ -3,6 +3,7 @@ import { Component, OnInit, Input, Output, OnChanges, EventEmitter,
   Directive, ViewContainerRef, ViewChildren, QueryList, ComponentFactoryResolver, AfterContentInit} from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MessagesHelper } from 'src/app/helpers/messages';
+import { ApiList } from 'src/app/utils/data/apiList.data';
 import { Comments } from 'src/service/comments';
 import { ChildboxComponent } from '../childbox/childbox.component';
 
@@ -64,12 +65,11 @@ export class CommentsComponent implements OnInit, OnChanges{
 
   
   deleteComment(commentInfo) {
-    var url =localStorage.getItem('host')+":4000/api/getTestMetaData"
     let headers = new HttpHeaders();
     headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
     this.spinner.show()
     // this.httpClient.post(localStorage.getItem('host')+":4000/api/mesud",calendarData,  {observe: 'response'})
-    this.httpClient.post(localStorage.getItem('host')+":4000/api/deleteComment",commentInfo,{observe: 'response', responseType: 'text'})
+    this.httpClient.post(ApiList.DELETE_COMMENT,commentInfo,{observe: 'response', responseType: 'text'})
     .subscribe(resp => { 
       console.log("Event is deleted successfully")
       

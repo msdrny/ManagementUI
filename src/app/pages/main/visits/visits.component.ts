@@ -31,7 +31,8 @@ import { SSIDStatus } from 'src/service/currentBssidSsidForClient';
 import { isNumeric } from 'rxjs/util/isNumeric';
 import * as moment from 'moment';
 import { TestMetadata } from 'src/service/TestMetadata';
-
+import { ApiList } from 'src/app/utils/data/apiList.data';
+import UrlJson from '../../../../assets/url.json';
 
 
 useTheme(am4themes_animated);
@@ -186,7 +187,7 @@ public estimatedEndDate
 
   async getApiResponseForTestStatus() {
     //return  await this.httpClient.get('http://192.168.10.105:4000/api/getTestStatus')
-    return  await this.httpClient.get('http://127.0.0.1:4000/api/getTestStatus')
+    return  await this.httpClient.get(ApiList.CURRENT_TEST_STATUS)
       .toPromise().then(async (res:any) => {
         if(isNumeric(res)){ await this.setInterval(res)}
        
@@ -247,7 +248,7 @@ return res;
     // });
 
     
-    this.httpClient.get(localStorage.getItem('host')+":4000/api/getAllCalendarList").subscribe( (resp:CalendarEvent[])=>
+    this.httpClient.get(ApiList.ALL_CALENDAR_LIST).subscribe( (resp:CalendarEvent[])=>
       {this.events=[]
         //console.log(resp[0])
         resp.forEach(element => {
@@ -389,7 +390,7 @@ return res;
     let headers = new HttpHeaders();
     headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
     // this.httpClient.post(localStorage.getItem('host')+":4000/api/mesud",calendarData,  {observe: 'response'})
-    this.httpClient.post(localStorage.getItem('host')+":4000/api/mesud",calendarData,  {observe: 'response', responseType: 'text'})
+    this.httpClient.post(ApiList.NEW_CALAENDAR_EVENT,calendarData,  {observe: 'response', responseType: 'text'})
     .subscribe(resp => { 
       console.log("Event is added successfully")
       this.insertLoadInfoToDatabase()
@@ -411,7 +412,7 @@ return res;
 public deleteEvent(){
   if(this.selectedDeleteEvent){
  var data=this.selectedDeleteEvent.split("!@!")
-       this.httpClient.post(localStorage.getItem('host')+":4000/api/deleteMesud",{"start":new Date(data[0]),title:data[1]},  {observe: 'response', responseType: 'text'})
+       this.httpClient.post(ApiList.DELETE_CALAENDAR_EVENT,{"start":new Date(data[0]),title:data[1]},  {observe: 'response', responseType: 'text'})
     .subscribe(resp => {  
       this.insertLoadInfoToDatabase()
       this.deleteModal.hide()
@@ -434,7 +435,7 @@ console.log(this.selectedDeleteEvent)
 
 
 async getApiResponseForTestMetadata() {
-  var url =localStorage.getItem('host')+":4000/api/getTestMetaData"
+  var url =ApiList.CURRENT_TEST_METADATA
   //return  await this.httpClient.get('http://192.168.10.105:4000/api/getTestStatus')
   return  await this.httpClient.get(url)
     .toPromise().then(async (res:TestMetadata) => {

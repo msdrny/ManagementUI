@@ -1,0 +1,7 @@
+{"backendUrl":"http://127.0.0.1",
+ "backendPort":"4000",
+ "influxDBUrl":"http://192.168.10.105",
+ "influxDBPort":"8086",
+ "promethuesUrl":"http://192.168.10.107"
+ 
+}

@@ -103,7 +103,6 @@ public showUnsuccesfulSpecificMessage(errorMessage): void {
     {
       closeButton: true,
       positionClass: this.position,
-      toastComponent: RetryDestroyingToastComponent,
       timeOut: this.timeOut,
       progressBar: true,
       tapToDismiss: false,

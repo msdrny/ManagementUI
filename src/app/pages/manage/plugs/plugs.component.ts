@@ -3,6 +3,7 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ActiveToast, ToastrService } from 'ngx-toastr';
 import { catchError, filter, takeUntil } from 'rxjs/operators';
+import { ApiList } from 'src/app/utils/data/apiList.data';
 
 import { SmartPlug } from '../../../nodes/smartPlug';
 import { ToastPosition } from '../../ui-elements/notifications/toast-position.enum';
@@ -65,7 +66,7 @@ export class PlugsComponent implements OnInit {
   }
 
   async getDeviceList() {
-    return  await this.httpClient.get('http://192.168.10.51:4000/api/deviceList')
+    return  await this.httpClient.get(ApiList.CURRENT_SMARTPLUG_LIST)
       .toPromise().then((res:SmartPlug[]) => {
         this.spinner.hide();
 // this.aggregatedSum
@@ -89,7 +90,7 @@ return res;
 
       let headers = new HttpHeaders();
       headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
-      this.httpClient.post("http://192.168.10.51:4000/api/toggleSmartPlug",  {params: httpParams,observe: 'response'})
+      this.httpClient.post(ApiList.TOGGLE_SMARTPLUG,  {params: httpParams,observe: 'response'})
       .subscribe(resp => {
         this.spinner.hide();
         this.showSuccessMessage(alias ,status)

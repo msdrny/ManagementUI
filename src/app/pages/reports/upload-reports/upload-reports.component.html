@@ -1,1 +1,65 @@
-<p>upload-reports works!</p>
+<h1 class="page-title">Test Reports <small><small>Upload</small></small></h1>
+<div class="row">
+  <div class="col-lg-4 col-12">
+    <div class="container">
+      <div class="card">
+        <section widgster [optionsControl]="false" [fullscreenControl]="false" [collapseControl]="false" bodyClass="p-0"
+        footerClass="bg-widget-transparent mt">
+        
+    
+
+        <label class="custom-file-upload">
+            <input type="file" name="file" class="file-input"
+            (change)="onFileSelected($event)" #fileUpload>
+            <i class="fa fa-cloud-upload"></i> 
+            
+            <span class="file-label">
+                Choose a file…
+              </span>
+
+
+
+        </label>
+
+        <span class="file-name">
+            {{fileName}}
+           </span>
+
+           <div class="field" *ngIf="!infoMessage">
+            <div class="control">
+              <progress
+                class="progress is-primary"
+                [attr.value]="progress"
+                max="100"
+              ></progress>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="control">
+              <button
+                class="button-class"
+                (click)="uploadSelectedFile()"
+              >
+                Upload
+              </button>
+            </div>
+          </div>
+
+
+
+    
+
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+

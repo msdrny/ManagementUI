@@ -5,6 +5,7 @@ import { TestReport } from 'src/service/testReports';
 import { saveAs } from 'file-saver';
 import { MessagesHelper } from 'src/app/helpers/messages';
 import { ErrorMessages } from 'src/app/utils/data/errorMessages.data';
+import { ApiList } from 'src/app/utils/data/apiList.data';
 @Component({
   selector: 'app-download-reports',
   providers:[MessagesHelper],
@@ -25,7 +26,7 @@ public testReports =  []
 
 
   public  getAllTestReports(){
-    var statusUrl="http://127.0.0.1:4000/api/files"
+    var statusUrl=ApiList.VIEW_FILE
     let headers = new HttpHeaders();
     headers = headers.set("Content-Type", "application/x-www-form-urlencoded");
     this.httpClient.get<TestReport[]>(statusUrl,  )
@@ -80,6 +81,16 @@ public testReports =  []
       console.error('error caught in component',error)
     });
   }
+
+  public checkButton(url:String){
+    //console.log(url.includes(".pdf"))
+    if(url.includes(".pdf")||url.includes(".docx")||url.includes(".doc") ) return false
+    else return true
+
+  }
+
+
+
 
 
 }
