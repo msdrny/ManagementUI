@@ -20,6 +20,7 @@ import { LocaleConfig } from 'ngx-daterangepicker-material/daterangepicker.confi
 import { Observable, throwError } from 'rxjs';
 import { map, catchError} from 'rxjs/operators';
 import { ApiList } from 'src/app/utils/data/apiList.data';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-floor',
@@ -176,13 +177,12 @@ chartObject: Highcharts.Chart = null;
   
 
 
-  constructor(private httpClient: HttpClient,private router: Router,private zone: NgZone,private sanitizationService: DomSanitizer) {
+  constructor(private httpClient: HttpClient,private router: Router,private zone: NgZone,private sanitizationService: DomSanitizer,private spinner: NgxSpinnerService) {
     this.alwaysShowCalendars = true;
   }
   
 
   ngOnInit(): void {
-    var date= new Date().getTime() /1000
     
    // this.srcForIperfGraph=this.sanitizationService.bypassSecurityTrustResourceUrl("http://10.0.50.100:3000/d-solo/QbgeMUAMz/wi-fi-test-house-hig-2-ghz-5-ghz?orgId=1&from=now-1h&to=now&refresh=10s&var-job=All&var-hostname=All&var-node=All&var-maxmount=%2Ffiles&var-name=&panelId=202")
     this.date = moment(new Date(2021,9,4,5,6,7))
@@ -685,8 +685,11 @@ return val;
 
 
   async getApiResponseForPenetration(startDatetime:number,endDatetime:number,difference:number) {
+    this.spinner.show()
+    console.log(this.spinner.show())
     return  await this.httpClient.get(ApiList.INFLUXDB+'/query?db=rssi&q= select Round(mean("Signal")) as Signal, mean("Frequency") as Frequency, mean("Bitrate") as Bitrate from rssi where time>='+startDatetime+' and time<='+endDatetime+' group by time('+difference+'s), wifi,interfaceName')
       .toPromise().then((res:HeatmapResults) => {
+        this.spinner.hide()
 
 return res;
       }).catch((err: HttpErrorResponse) => {
@@ -694,11 +697,12 @@ return res;
         this.ngOnDestroyRssi()
         console.log('An error occurred in Http Request'+err.message);
         throw err.error 
+        this.spinner.hide()
       });
   }
 
   async getApiResponseForPenetrationLive() {
-  
+    
     return  await this.httpClient.get(ApiList.LIVE_WATERFALL_RSSI)
      //return  await this.httpClient.get('http://192.168.10.105:8086/query?db=rssi&q= select Round(mean("Signal")) as Signal, mean("Frequency") as Frequency, mean("Bitrate") as Bitrate   from rssi where  time>=1614299477000000000 and time<=1614385877000000000 group by time(15s), wifi,interfaceName') 
     .toPromise().then((res:HeatmapResults) => {
@@ -708,6 +712,7 @@ return res;
 //   row.value
 // ];
 // console.log(res[0]._id.time + " "+res[0].total )
+
 return res;
       }).catch((err: HttpErrorResponse) => {
         // simple logging, but you can do a lot more, see below

@@ -3,6 +3,10 @@
 
     </h1>
 
+    <ngx-spinner [fullScreen]="false" type="ball-clip-rotate-multiple" size="medium">
+      <p class="loading">Data Loading...</p>
+    </ngx-spinner>
+
         <div class="row">
           <div class="col-12">
             <section widgster  [optionsControl]="true" [reloadControl]="true"
@@ -11,7 +15,7 @@
             
               <div  class="chart-overflow-bottom" >
                 <!-- <canvas  #canvas id="canvas" width="500" height="100" style="border:none" ></canvas> -->
-                <input type="text" placeholder="Enter Datetime" style="height: 30px; width: 300px;"
+                <input type="text"  class="form-control input-transparent floorInput" placeholder="Click for entering  datetime" style="height: 30px; width: 300px; margin-left:10px"
                 ngxDaterangepickerMd
                 [timePicker]="true"
                 [timePickerSeconds]="true"
@@ -29,7 +33,7 @@
                 (change)="change(this)"/>  
       
 
-        <div id="heatmap"  style="height: 1200px; width: auto;" ></div>
+        <div id="heatmap"  style="height: 1600px; width: auto;" ></div>
               </div>
             </section>
         </div>

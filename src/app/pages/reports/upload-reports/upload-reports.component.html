@@ -27,11 +27,11 @@
 
            <div class="field" *ngIf="!infoMessage">
             <div class="control">
-              <progress
-                class="progress is-primary"
-                [attr.value]="progress"
-                max="100"
-              ></progress>
+
+              
+                <progressbar    type="success" [animate]="true" [value]="progress" [max]="100" [animate]="true" [striped]="true" >
+                  </progressbar>
+  
             </div>
           </div>
 

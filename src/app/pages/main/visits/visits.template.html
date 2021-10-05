@@ -168,7 +168,7 @@
      
       <ngx-datatable class="table table-striped table-hover" [rows]="ssidList"  [columnMode]="force" [sortType]="single" 
       [headerHeight]="'auto'"[footerHeight]="'auto'" [rowHeight]="'auto'" [limit]="6" [scrollbarH]="true">
-      <ngx-datatable-column name="instance" [width]="90">
+      <ngx-datatable-column name="instance" [width]="190">
         <ng-template let-value="value" ngx-datatable-cell-template>
           {{value}}
         </ng-template>
@@ -178,12 +178,12 @@
           <span class="fw-semi-bold">{{value}}</span>
         </ng-template>
       </ngx-datatable-column> -->
-      <ngx-datatable-column name="ssid" [width]="50">
+      <ngx-datatable-column name="ssid" [width]="150">
         <ng-template let-value="value" ngx-datatable-cell-template>
           {{value}}
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="bssid">
+      <ngx-datatable-column name="bssid" >
         <ng-template let-value="value" ngx-datatable-cell-template>
           {{value}}
         </ng-template>
